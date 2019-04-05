@@ -5,6 +5,51 @@
     <title>Base</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style>
+
+      li {
+        float: left;
+      }
+
+      li a, .dropbtn {
+        display: inline-block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+      }
+
+      li a:hover, .dropdown:hover .dropbtn {
+        background-color: red;
+      }
+
+      li.dropdown {
+        display: inline-block;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+      }
+
+      .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+      }
+
+      .dropdown-content a:hover {background-color: #f1f1f1}
+
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+    </style>
 </head>
   <body>
     <nav class="navbar navbar-default navbar-static-top">
@@ -19,9 +64,14 @@
           <li><a class="navbar-link" href="{% url 'da:feeddata' %}">Feed Data</a></li>
           <li><a class="navbar-link" href="{% url 'da:aboutus' %}">About Us</a></li>
           <li><a class="navbar-link" href="{% url 'da:help' %}">Help</a></li>
-          <li><a class="navbar-link" href="{% url 'da:register' %}">Register</a></li>
-          <li><a class="navbar-link" href="{% url 'da:register_h' %}">Hospital Registration</a></li>
-          <li><a class="navbar-link" href="{% url 'da:register_p' %}">Pharmacy Registration</a></li>     
+          <li class="dropdown">
+            <a href="javascript:void(0)" class="dropbtn">Register</a>
+            <div class="dropdown-content">
+              <a href="{% url 'da:register' %}">General Registeration</a>
+              <a href="{% url 'da:register_h' %}">Hospital Registration</a>
+              <a href="{% url 'da:register_p' %}">Pharmacy Registration</a>
+            </div>
+          </li>
           {# Some logic on what to display for last item#}
           {% if user.is_authenticated %}
             <li><a href="{% url 'logout' %}">Logout</a></li>
