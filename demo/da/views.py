@@ -101,22 +101,22 @@ def user_login(request):
 		return render(request, 'da/login.html', {})
 
 def newsfeed(request):
-	return render(request,'dp/newsfeed.html')
+	return render(request,'da/newsfeed.html')
 
 def keyfacts(request):
-	return render(request,'dp/keyfacts.html')
+	return render(request,'da/keyfacts.html')
 
 def outbreaks(request):
-	return render(request,'dp/outbreaks.html')
+	return render(request,'da/outbreaks.html')
 
 def prediction(request):
-	return render(request,'dp/prediction.html')
+	return render(request,'da/prediction.html')
 
 def aboutus(request):
-	return render(request,'dp/aboutus.html')
+	return render(request,'da/aboutus.html')
 
 def help(request):
-	return render(request,'dp/help.html')
+	return render(request,'da/help.html')
 
 def feeddata(request):
-	return render(request,'dp/feeddata.html')
+	return render(request,'da/feeddata.html')
