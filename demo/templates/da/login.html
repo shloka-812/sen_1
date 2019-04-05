@@ -1,17 +1,21 @@
 {% extends 'da/base.html' %}
 {% block body_block %}
-  <div class="container">
-    <div class="jumbotron">
-      <h1>Login here :</h1>
-<form method="post" action="{% url 'da:user_login' %}">
-          {% csrf_token %}
-          {# A more "HTML" way of creating the login form#}
-          <label for="username">Username:</label>
-          <input type="text" name="username" placeholder="Username">
-		  <label for="password">Password:</label>
-          <input type="password" name="password" placeholder="Password">
-<input type="submit" name="" value="Login">
-</form>
-</div>
-  </div>
+
+<br>
+<h2 align="center"> Login Here </h2><br>
+<table style="width:50%; background-color: #f2f2f2 " align="center" >
+    <tr>
+        <td>
+            <form method="post" action="{% url 'da:user_login' %}">
+                {% csrf_token %}
+                {# A more "HTML" way of creating the login form#}
+                <label for="username">Username:</label>
+                <input type="text" name="username" placeholder="Username">
+                    <label for="password">Password:</label>
+                    <input type="password" name="password" placeholder="Password">
+                        <input type="submit" name="" value="Login">
+            </form>
+        </td>
+    </tr>
+</table>
 {% endblock %}
