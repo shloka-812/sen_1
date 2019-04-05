@@ -100,3 +100,23 @@ def user_login(request):
 	else:
 		return render(request, 'da/login.html', {})
 
+def newsfeed(request):
+	return render(request,'dp/newsfeed.html')
+
+def keyfacts(request):
+	return render(request,'dp/keyfacts.html')
+
+def outbreaks(request):
+	return render(request,'dp/outbreaks.html')
+
+def prediction(request):
+	return render(request,'dp/prediction.html')
+
+def aboutus(request):
+	return render(request,'dp/aboutus.html')
+
+def help(request):
+	return render(request,'dp/help.html')
+
+def feeddata(request):
+	return render(request,'dp/feeddata.html')
