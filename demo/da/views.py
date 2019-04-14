@@ -131,11 +131,11 @@ def newsfeed(request):
 		text = text + "Description:" + i["description"] + "<br>"
 		text = text + "url" + i["url"] + "<br>"
 		text = text + "About" + i["content"] + "<br>"
-	 	text= text +  "<br><br>"
+		text= text +  "<br><br>"
 		count = count + 1
 		if(count == 10):
 			break
-	return HttpResponse(text)
+	return render(request,'da/newsfeed.html',{'sent':text})
 
 	
 def keyfacts(request):
