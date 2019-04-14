@@ -15,7 +15,7 @@
     <title>OpenLayers example</title>
   </head>
   <body>
-    <h2>My Map</h2>
+    <h2>Detected Outbreaks</h2>
     <div id="map" class="map"></div>
     <script type="text/javascript">
       var map = new ol.Map({
@@ -30,6 +30,25 @@
           zoom: 4
         })
       });
+
+      var marker = new ol.Feature({
+	  geometry: new ol.geom.Point(
+	    ol.proj.fromLonLat([-74.006,40.7127])
+	  ),
+		});
+      var marker2 = new ol.Feature({
+	  geometry: new ol.geom.Point(
+	    ol.proj.fromLonLat([77.006,28.7127])
+	  ),  
+		});
+      
+	var vectorSource = new ol.source.Vector({
+	  features: [marker,marker2]
+	});
+	var markerVectorLayer = new ol.layer.Vector({
+	  source: vectorSource,
+	});
+	map.addLayer(markerVectorLayer);
     </script>
   </body>
 </html>

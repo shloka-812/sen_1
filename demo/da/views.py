@@ -1,10 +1,13 @@
-
 from django.shortcuts import render
 from da.forms import UserForm,UserProfileInfoForm,HospitalProfileInfoForm,PharmacyProfileInfoForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+import requests as rq
+import json
+from django.http import JsonResponse
+
 
 def index(request):
 	return render(request,'da/index.html')
@@ -101,8 +104,40 @@ def user_login(request):
 		return render(request, 'da/login.html', {})
 
 def newsfeed(request):
-	return render(request,'da/newsfeed.html')
+	#url = ('https://newsapi.org/v2/everything?'
+     #  'q=Outbreaks&'
+     #  'from=2019-04-08&'
+     #  'sortBy=popularity&'
+     #  'apiKey=962af2e30f5740c39bd6b0cb5a8b5de3')
+	#response = rq.get(url)
+	#return render_to_response("da/newsfeed.html", {"obj_as_json": json.dumps(response)})
+	#return render(request,'da/newsfeed.html',response.json())
+	#return HttpResponse(response, content_type='application/json')
+	#return render(request,'da/newsfeed.html',{'current_date':'now'})
+	#import requests
+	url = ('https://newsapi.org/v2/everything?'
+		'q=Outbreaks&'
+		'from=2019-04-08&'
+		'sortBy=popularity&'
+		'apiKey=962af2e30f5740c39bd6b0cb5a8b5de3')
+	response = rq.get(url)
+	dict = response.json()
+	count = 0
+	text = ""
+	for i in dict["articles"]:
+		text = text + "Source :" + i["source"]["name"] + "<br>"
+		if(i["author"]!=None):
+			text = text + "Author :" + i["author"] + "<br>"
+		text = text + "Description:" + i["description"] + "<br>"
+		text = text + "url" + i["url"] + "<br>"
+		text = text + "About" + i["content"] + "<br>"
+	 	text= text +  "<br><br>"
+		count = count + 1
+		if(count == 10):
+			break
+	return HttpResponse(text)
 
+	
 def keyfacts(request):
 	return render(request,'da/keyfacts.html')
 
