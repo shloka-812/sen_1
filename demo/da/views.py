@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from .models import Outbreak,HospitalProfileInfo,PharmacyProfileInfo
+from django.contrib.auth.models import User
 import requests as rq
 import json
 from django.http import JsonResponse

@@ -2,5 +2,23 @@
 {% load staticfiles %}
 {% block body_block %}
 <h2>Daily disease News</h2>
-<p>Kirtana is using Google News api to dispay the latest news</p>
+<ul>
+{% for i in dict["articles"] %}
+	<li>Source : {{ i["source"]["name"] }}
+		<br>
+	{% if i["author"] %}
+		Author : {{ i["author"] }}
+		<br>
+	{% endif %}
+		Description: {{ i["description"] }}
+		<br>
+	    url: {{ i["url"] }}
+	    <br> 
+	    About: {{ i["content"] }}
+	    <br>
+	    <br>
+	</li>
+{% endfor %}
+</ul>
+
 {% endblock %}
