@@ -1,0 +1,40 @@
+{% extends "da/base.html" %}
+{% block body_block %}
+<br>
+   <h2 align="center"> Feed data </h2><br>
+    {% if user.is_authenticated %}
+        
+        <table style="width:50%; background-color: #f2f2f2 " align="center" >
+		<tr>
+		<td>
+ 	<form action="{% url 'da:outbreak_submission' %}" method="post">
+ 		{% csrf_token %}
+
+    <label for="disease_name">disease name</label><br>
+    <input type="text" id="disease_name" name="disease_name" >
+    <br><br>
+    <label for="no_of_deaths">No of deaths</label>
+    <input type="text" id="no_of_deaths" name="no_of_deaths">
+    <br><br>
+    <label for="no_of_affected">NO of affected people</label><br>
+    <input type="text" id="no_of_affected" name="no_of_affected">
+    <br><br>
+    <label for="location">location</label><br>
+    <input type="text" id="location" name="location">
+    <br><br>
+    <label for="date">Date Of Entry</label><br>
+    <input type="Date" id="date" name="date">
+    <br><br>
+    <input type="submit" value="Submit">
+  	</form>
+	</td>
+	</tr>
+	</table>
+
+
+ {% else %}
+        <h2>pls login</h2>
+    {% endif %}
+
+{% endblock %}
+
