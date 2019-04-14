@@ -29,5 +29,16 @@ class PharmacyProfileInfo(models.Model):
 	def __str__(self):
 		return self.p_user.username
 
+class Outbreak(models.Model):
+	disease_name =models.CharField(max_length=100,default='')
+	no_of_deaths = models.IntegerField(default=0)
+	no_of_affected = models.IntegerField(default=0)
+	location = models.CharField(max_length=100,default='')
+	date = models.DateField(verbose_name="date")
+
+	def __str__(self):
+		return self.disease_name
+
+
 
 
