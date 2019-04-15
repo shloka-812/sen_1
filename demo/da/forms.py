@@ -23,4 +23,11 @@ class PharmacyProfileInfoForm(forms.ModelForm):
 		model=PharmacyProfileInfo
 		fields=('p_name','p_city','p_address')
 
+class UserOutbreakInfoForm(forms.Form):
+	from_date = forms.DateField(label='Enter From date for outbreaks')
+	to_date = forms.DateField(label='Enter To date for outbreaks')
+	disease = forms.CharField(label='Disease Name',max_length=200)
+
+
+
 

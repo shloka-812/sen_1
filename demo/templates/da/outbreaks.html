@@ -16,8 +16,18 @@
   </head>
   <body>
     <h2>Detected Outbreaks</h2>
+    <form  method="post">
+    	{% csrf_token %}
+    	{{ form }}
+    	<input type="submit" value="Submit">
+	</form>
+	{% if request.POST %}
+	<p>Got values {{fromDate}} and {{toDate}} and {{diseaseName}} <br> </p>
+	{% endif %}
+
     <div id="map" class="map"></div>
     <script type="text/javascript">
+      //query: tuples that have from date ,to date and disease as specified by user, 
       var map = new ol.Map({
         target: 'map',
         layers: [
@@ -27,24 +37,21 @@
         ],
         view: new ol.View({
           center: ol.proj.fromLonLat([72.6,23.2]),
-          zoom: 4
+          zoom: 2.1
         })
       });
-      i=0;
-      var marker[i] = new ol.Feature({
-	  geometry: new ol.geom.Point(
-	    ol.proj.fromLonLat([-74.006,40.7127])
-	  ),
+      var marker = new Array();
+      {% for eachquery in queries %}
+         marker[i] = new ol.Feature({
+	  	 geometry: new ol.geom.Point(
+	    	ol.proj.fromLonLat([-74.006,40.7127+i])
+	  	),
 		});
-      i=i+1;
-      var marker[i] = new ol.Feature({
-	  geometry: new ol.geom.Point(
-	    ol.proj.fromLonLat([77.006,28.7127])
-	  ),  
-		});
+         i=i+1;
+      {% endfor %}
       
 	var vectorSource = new ol.source.Vector({
-	  features: [marker]
+	  features: marker
 	});
 	var markerVectorLayer = new ol.layer.Vector({
 	  source: vectorSource,

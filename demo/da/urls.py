@@ -15,7 +15,6 @@ urlpatterns=[
     url(r'^outbreaks/$', views.outbreaks, name='outbreaks'),
     url(r'^prediction/$', views.prediction, name='prediction'),
     url(r'^feeddata/$', views.feeddata, name='feeddata'),
-    url(r'^outbreak/$',views.outbreak,name='outbreak'),
     url(r'^outbreak_submission/$',views.outbreak_submission,name='outbreak_submission'),
              
 ]

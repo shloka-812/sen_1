@@ -1,11 +1,11 @@
 
 from django.shortcuts import render
-from da.forms import UserForm,UserProfileInfoForm,HospitalProfileInfoForm,PharmacyProfileInfoForm
+from da.forms import UserForm,UserProfileInfoForm,HospitalProfileInfoForm,PharmacyProfileInfoForm,UserOutbreakInfoForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from .models import Outbreak,HospitalProfileInfo,PharmacyProfileInfo
+from .models import Outbreak,HospitalProfileInfo,PharmacyProfileInfo,Outbreak
 from django.contrib.auth.models import User
 import requests as rq
 import json
@@ -134,7 +134,21 @@ def keyfacts(request):
     return render(request,'da/keyfacts.html')
 
 def outbreaks(request):
-    return render(request,'da/outbreaks.html')
+    if request.method == 'POST':
+        form = UserOutbreakInfoForm(request.POST)
+        if form.is_valid():
+            fdf = request.POST.get('from_date')
+            tdf = request.POST.get('to_date')
+            dnf = request.POST.get('disease')
+            q = Outbreak.objects.filter(date__lte=tdf)
+            q1 = q.filter(date__gte=fdf)
+            q2 = q1.filter(disease=dnf)
+            return render(request, 'da/outbreaks.html', {'queries':q2,'form':form, 'fromDate':fdf,'toDate':tdf,'diseaseName':dnf})
+    else:
+        form = UserOutbreakInfoForm()
+
+    return render(request, 'da/outbreaks.html', {'form': form})
+
 
 def prediction(request):
     return render(request,'da/prediction.html')
@@ -146,9 +160,6 @@ def help(request):
     return render(request,'da/help.html')
 
 def feeddata(request):
-    return render(request,'da/feeddata.html')
-
-def outbreak(request):
     return render(request,'da/feed_data.html')
 
 def outbreak_submission(request):
