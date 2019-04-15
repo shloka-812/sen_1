@@ -1,7 +1,32 @@
 {% extends "da/base.html" %}
 {% load staticfiles %}
 {% block body_block %}
-<h2>Daily disease News</h2>
-{{sent}}
+<h2>Daily Disease News</h2>
+<div id="id01"></div>
+<script type="text/javascript">
+var None="";
+var newsr ={{ news |safe }};
+var text = "";
+count = 0;
 
+for (var key in newsr){
+      	 var value = newsr[key];
+      	 
+      	  console.log(value);
+      	 
+		text = text +"<a href=\""+value.url +"\"><h4>" + value.title + "</h4></a>";
+		text = text + "By  " + value.author+"<br><br>";
+		text = text + "Description : " + value.description + "<br><br>";
+		text = text + "About : " + value.content + "<br>";
+		text= text +  "<br><br>";
+		
+		count = count + 1;
+		if(count == 10){
+			break;
+		}
+	
+		}
+document.getElementById("id01").innerHTML = text;
+</script>
+<h1>value.source.name</h1>
 {% endblock %}

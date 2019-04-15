@@ -41,14 +41,47 @@
         })
       });
       var marker = new Array();
-      {% for eachquery in queries %}
+      var deathlist = {{dq}};
+      var afflist = {{aq}};
+      i=0;
+    
+      for (var key in deathlist){
+      	 var value = deathlist[key];
          marker[i] = new ol.Feature({
 	  	 geometry: new ol.geom.Point(
-	    	ol.proj.fromLonLat([-74.006,40.7127+i])
+	    	ol.proj.fromLonLat(value)
 	  	),
 		});
          i=i+1;
-      {% endfor %}
+        }
+      j=0;
+       
+      for (var key in afflist){
+      	 var value = afflist[key];
+         marker[i] = new ol.Feature({
+	  	 geometry: new ol.geom.Point(
+	    	ol.proj.fromLonLat(value)
+	  	),
+		});
+         i=i+1;
+         j=j+1;
+      }
+      /*
+    	marker[0] = new ol.Feature({
+	  	 geometry: new ol.geom.Point(
+	    	ol.proj.fromLonLat(deathlist["0"])
+	  	),
+		});
+		marker[1] = new ol.Feature({
+	  	 geometry: new ol.geom.Point(
+	    	ol.proj.fromLonLat(afflist["0"])
+	  	),
+		});
+		marker[2] = new ol.Feature({
+	  	 geometry: new ol.geom.Point(
+	    	ol.proj.fromLonLat(afflist["1"])
+	  	),
+		});*/
       
 	var vectorSource = new ol.source.Vector({
 	  features: marker

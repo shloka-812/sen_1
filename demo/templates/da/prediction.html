@@ -1,6 +1,15 @@
-{% extends "da/base.html" %}
+{% extends 'da/base.html' %}
 {% load staticfiles %}
 {% block body_block %}
-<h2>Disease Prediction</h2>
-<p>Kavit is developing an algorithm to predict disease based on symptoms entered</p>
+	<h1>Disease Prediction</h1>
+	{% if request.POST %}
+	<h2>Predicted disease : {{diseasepredicted}} <br> </h2>
+	{% endif %}
+	<h3>Select five symptoms from the below drop-downs to predict disease:<br></h3>
+	<br>
+	<form method="post">
+		{% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Save">
+	</form>
 {% endblock %}

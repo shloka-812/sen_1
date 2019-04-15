@@ -1,16 +1,96 @@
-
+import datetime
 from django.shortcuts import render
-from da.forms import UserForm,UserProfileInfoForm,HospitalProfileInfoForm,PharmacyProfileInfoForm,UserOutbreakInfoForm
+from da.forms import UserForm,UserProfileInfoForm,HospitalProfileInfoForm,PharmacyProfileInfoForm,UserOutbreakInfoForm,DiseaseForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
+from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from .models import Outbreak,HospitalProfileInfo,PharmacyProfileInfo,Outbreak
+from .models import Outbreak,HospitalProfileInfo,PharmacyProfileInfo,Outbreak,disease_prediction,citymap,countrymap
 from django.contrib.auth.models import User
 import requests as rq
 import json
 from django.http import JsonResponse
+import numpy as np
+import pandas as pd
+from sklearn import tree
+from sklearn.metrics import accuracy_score
+import pickle
 
+disease=['Fungal infection','Allergy','GERD','Chronic cholestasis','Drug Reaction',
+'Peptic ulcer diseae','AIDS','Diabetes','Gastroenteritis','Bronchial Asthma','Hypertension',
+' Migraine','Cervical spondylosis',
+'Paralysis (brain hemorrhage)','Jaundice','Malaria','Chicken pox','Dengue','Typhoid','hepatitis A',
+'Hepatitis B','Hepatitis C','Hepatitis D','Hepatitis E','Alcoholic hepatitis','Tuberculosis',
+'Common Cold','Pneumonia','Dimorphic hemmorhoids(piles)',
+'Heartattack','Varicoseveins','Hypothyroidism','Hyperthyroidism','Hypoglycemia','Osteoarthristis',
+'Arthritis','(vertigo) Paroymsal  Positional Vertigo','Acne','Urinary tract infection','Psoriasis',
+'Impetigo']
+
+l1=['back_pain','constipation','abdominal_pain','diarrhoea','mild_fever','yellow_urine',
+'yellowing_of_eyes','acute_liver_failure','fluid_overload','swelling_of_stomach',
+'swelled_lymph_nodes','malaise','blurred_and_distorted_vision','phlegm','throat_irritation',
+'redness_of_eyes','sinus_pressure','runny_nose','congestion','chest_pain','weakness_in_limbs',
+'fast_heart_rate','pain_during_bowel_movements','pain_in_anal_region','bloody_stool',
+'irritation_in_anus','neck_pain','dizziness','cramps','bruising','obesity','swollen_legs',
+'swollen_blood_vessels','puffy_face_and_eyes','enlarged_thyroid','brittle_nails',
+'swollen_extremeties','excessive_hunger','extra_marital_contacts','drying_and_tingling_lips',
+'slurred_speech','knee_pain','hip_joint_pain','muscle_weakness','stiff_neck','swelling_joints',
+'movement_stiffness','spinning_movements','loss_of_balance','unsteadiness',
+'weakness_of_one_body_side','loss_of_smell','bladder_discomfort','foul_smell_of urine',
+'continuous_feel_of_urine','passage_of_gases','internal_itching','toxic_look_(typhos)',
+'depression','irritability','muscle_pain','altered_sensorium','red_spots_over_body','belly_pain',
+'abnormal_menstruation','dischromic _patches','watering_from_eyes','increased_appetite','polyuria','family_history','mucoid_sputum',
+'rusty_sputum','lack_of_concentration','visual_disturbances','receiving_blood_transfusion',
+'receiving_unsterile_injections','coma','stomach_bleeding','distention_of_abdomen',
+'history_of_alcohol_consumption','fluid_overload','blood_in_sputum','prominent_veins_on_calf',
+'palpitations','painful_walking','pus_filled_pimples','blackheads','scurring','skin_peeling',
+'silver_like_dusting','small_dents_in_nails','inflammatory_nails','blister','red_sore_around_nose',
+'yellow_crust_ooze']
+
+filename='da/modelpick'
+
+def prediction(request):
+    # if this is a POST request we need to process the form data
+    form = DiseaseForm(request.POST or None)
+    obj=disease_prediction()
+    l2=[]
+    for x in range(0,len(l1)):
+        l2.append(0)
+    response=form.fields
+    print(response)
+    if request.POST:
+        if form.is_valid():
+            data = request.POST.copy()
+            psymptoms = [data.get('symptoms_1'),data.get('symptoms_2'),data.get('symptoms_3'),data.get('symptoms_4'),data.get('symptoms_5')]
+            loaded_model = pickle.load(open(filename, 'rb'))
+           
+            for k in range(0,len(l1)):
+                for z in psymptoms:
+                    if(z==l1[k]):
+                        l2[k]=1
+            inputtest = [l2]
+            predict = loaded_model.predict(inputtest)
+            predicted=predict[0]
+
+            h='no'
+
+            for a in range (0, len(disease)):
+                if(predicted == a):
+                    h='yes'
+                    break
+            if(h=='yes'):
+                print(disease[a])
+                form = DiseaseForm()
+                
+            return render(request,'da/prediction.html',{'diseasepredicted':disease[a],'form': form})
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = DiseaseForm()
+    
+    return render(request,'da/prediction.html',{'form': form})
+    
 
 def index(request):
     return render(request,'da/index.html')
@@ -114,20 +194,7 @@ def newsfeed(request):
 		'apiKey=962af2e30f5740c39bd6b0cb5a8b5de3')
 	response = rq.get(url)
 	dict = response.json()
-	count = 0
-	text = ""
-	for i in dict["articles"]:
-		text = text + "Source :" + i["source"]["name"] + "<br>"
-		if(i["author"]!=None):
-			text = text + "Author :" + i["author"] + "<br>"
-		text = text + "Description:" + i["description"] + "<br>"
-		text = text + "url" + i["url"] + "<br>"
-		text = text + "About" + i["content"] + "<br>"
-		text= text +  "<br><br>"
-		count = count + 1
-		if(count == 10):
-			break
-	return render(request,'da/newsfeed.html',{'sent':text})
+	return render(request,'da/newsfeed.html',{'news':dict["articles"]})
 
 	
 def keyfacts(request):
@@ -140,18 +207,57 @@ def outbreaks(request):
             fdf = request.POST.get('from_date')
             tdf = request.POST.get('to_date')
             dnf = request.POST.get('disease')
-            q = Outbreak.objects.filter(date__lte=tdf)
-            q1 = q.filter(date__gte=fdf)
-            q2 = q1.filter(disease=dnf)
-            return render(request, 'da/outbreaks.html', {'queries':q2,'form':form, 'fromDate':fdf,'toDate':tdf,'diseaseName':dnf})
+            q = Outbreak.objects.all()
+            q1 = q.filter(date__lte=tdf)
+            q2 = q1.filter(date__gte=fdf)
+            q3 = q2.filter(disease_name=dnf)
+            if q3.exists():
+                queryset = q3
+            else:
+                if q2.exists():
+                    queryset = q2
+                else: 
+                    days100 = timezone.now() - datetime.timedelta(days=100)
+                    queryset = Outbreak.objects.filter(date__gte=days100)
+            i=0
+            j=0
+            dloc ={}
+            aloc={}
+            for each in queryset:
+                loc = each.location
+                cityobj = citymap.objects.filter(city=loc)
+                if cityobj.exists() == False:
+                    cityobj = countrymap.objects.filter(country=loc)
+                if cityobj.exists():
+                    if each.no_of_deaths > 0:
+                        dloc[i] = [cityobj[0].lng,cityobj[0].lat]
+                        i=i+1
+                    if each.no_of_affected > 0 :
+                        aloc[j] = [cityobj[0].lng,cityobj[0].lat]
+                        j=j+1
+            return render(request, 'da/outbreaks.html', {'dq':dloc,'aq':aloc,'form':form,'fromDate':fdf,'toDate':tdf,'diseaseName':dnf})
     else:
+        days100 = timezone.now() - datetime.timedelta(days=100)
+        queryset = Outbreak.objects.filter(date__gte=days100)
+        i=0
+        j=0
+        dloc={}
+        aloc={}
+        for each in queryset:
+            loc = each.location
+            cityobj = citymap.objects.filter(city=loc)
+            if cityobj.exists() == False:
+                cityobj = countrymap.objects.filter(country=loc)
+            if cityobj.exists():
+                if each.no_of_deaths > 0:
+                    dloc[i] = [cityobj[0].lng,cityobj[0].lat]
+                    i=i+1
+                if each.no_of_affected > 0 :
+                    aloc[j] = [cityobj[0].lng,cityobj[0].lat]
+                    j=j+1
         form = UserOutbreakInfoForm()
 
-    return render(request, 'da/outbreaks.html', {'form': form})
-
-
-def prediction(request):
-    return render(request,'da/prediction.html')
+    return render(request, 'da/outbreaks.html', {'dq':dloc,'aq':aloc,'form': form})
 
 def aboutus(request):
     return render(request,'da/aboutus.html')
@@ -161,7 +267,7 @@ def help(request):
 
 def feeddata(request):
     username = None
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         username = request.user
     try:
         h=HospitalProfileInfo.objects.filter(h_user = username)

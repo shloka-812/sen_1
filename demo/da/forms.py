@@ -1,6 +1,11 @@
 from django import forms
-from da.models import UserProfileInfo,HospitalProfileInfo,PharmacyProfileInfo
+from da.models import UserProfileInfo,HospitalProfileInfo,PharmacyProfileInfo,disease_prediction
 from django.contrib.auth.models import User
+
+class DiseaseForm(forms.ModelForm):
+    class Meta:
+        model = disease_prediction
+        fields = ['symptoms_1', 'symptoms_2', 'symptoms_3', 'symptoms_4', 'symptoms_5']
 
 class UserForm(forms.ModelForm):
 	password = forms.CharField(widget=forms.PasswordInput())
