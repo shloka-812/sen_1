@@ -160,9 +160,6 @@ def help(request):
     return render(request,'da/help.html')
 
 def feeddata(request):
-    return render(request,'da/feeddata.html')
-
-def outbreak(request):
     username = None
     if request.user.is_authenticated():
         username = request.user
