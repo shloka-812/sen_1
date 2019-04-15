@@ -30,20 +30,21 @@
           zoom: 4
         })
       });
-
-      var marker = new ol.Feature({
+      i=0;
+      var marker[i] = new ol.Feature({
 	  geometry: new ol.geom.Point(
 	    ol.proj.fromLonLat([-74.006,40.7127])
 	  ),
 		});
-      var marker2 = new ol.Feature({
+      i=i+1;
+      var marker[i] = new ol.Feature({
 	  geometry: new ol.geom.Point(
 	    ol.proj.fromLonLat([77.006,28.7127])
 	  ),  
 		});
       
 	var vectorSource = new ol.source.Vector({
-	  features: [marker,marker2]
+	  features: [marker]
 	});
 	var markerVectorLayer = new ol.layer.Vector({
 	  source: vectorSource,
