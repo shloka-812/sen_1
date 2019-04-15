@@ -160,28 +160,29 @@ def feeddata(request):
     return render(request,'da/feeddata.html')
 
 def outbreak(request):
-    return render(request,'da/feed_data.html')
-
-def outbreak_submission(request):
-    username = request.POST.get('username')
+    username = None
+    if request.user.is_authenticated():
+        username = request.user
     try:
-        h = HospitalProfileInfo.objects.get(h_user__exact = username)
+        h=HospitalProfileInfo.objects.filter(h_user = username)
+        p=PharmacyProfileInfo.objects.filter(p_user = username)
+        if h.exists() or p.exists():
+            return render(request,'da/feed_data.html')
 
-
-    #if HospitalProfileInfo.objects.filter(h_user.username == username).exists() or PharmacyProfileInfo.objects.filter(p_user.username == username):
-    #user = authenticate(username=h_users.username)
-        disease_name = request.POST["disease_name"]
-        no_of_deaths = request.POST["no_of_deaths"]
-        no_of_affected = request.POST["no_of_affected"]
-        location = request.POST["location"]
-        date = request.POST["date"]
-
-        outbrk = Outbreak(disease_name=disease_name, no_of_deaths = no_of_deaths, no_of_affected=no_of_affected, location=location, date=date)
-        outbrk.save()
-        return render(request,'da/feed_data.html')
-
-    #else:
-    #   return HttpResponse("sorry u cant enter the data")
+        else:
+            return HttpResponse("sorry u cant enter the data")
     except HospitalProfileInfo.DoesNotExist:
         return HttpResponse("sorry u cant enter the data")
+
+
+def outbreak_submission(request):
+    disease_name = request.POST["disease_name"]
+    no_of_deaths = request.POST["no_of_deaths"]
+    no_of_affected = request.POST["no_of_affected"]
+    location = request.POST["location"]
+    date = request.POST["date"]
+
+    outbrk = Outbreak(disease_name=disease_name, no_of_deaths = no_of_deaths, no_of_affected=no_of_affected, location=location, date=date)
+    outbrk.save()
+    return render(request,'da/feed_data.html')
 
