@@ -21,10 +21,13 @@
     	{{ form }}
     	<input type="submit" value="Submit">
 	</form>
-	{% if request.POST %}
+	<!--{% if request.POST %}
 	<p>Got values {{fromDate}} and {{toDate}} and {{diseaseName}} <br> </p>
 	{% endif %}
-
+	<p>{{dq}}</p>
+	<p>{{dn}}</p>
+	<p>{{aq}}</p>
+	<p>{{an}}</p>-->
     <div id="map" class="map"></div>
     <script type="text/javascript">
       //query: tuples that have from date ,to date and disease as specified by user, 
@@ -43,8 +46,20 @@
       var marker = new Array();
       var deathlist = {{dq}};
       var afflist = {{aq}};
-      var dnum = {{dn}}
-      var anum = {{an}}
+      var dnum = {{dn}};
+      var anum = {{an}};
+      var mag = new Array();
+      i=0;
+      for (var temp in dnum) {
+      	var num=dnum[temp];
+      	mag[i]=num;
+      	i=i+1;
+      }
+      for (var temp in anum) {
+      	var num=anum[temp];
+      	mag[i]=num;
+      	i=i+1;
+      }
       
       i=0;
       for (var key in deathlist){
@@ -54,6 +69,20 @@
 	    	ol.proj.fromLonLat(value)
 	  	),
 		});
+         marker[i].setStyle(new ol.style.Style({
+            image: new ol.style.Circle({
+              radius: 3+mag[i] ,
+              fill: new ol.style.Fill({
+                color: '#f00'
+              })
+            }),
+            text: new ol.style.Text({
+              text: ""+mag[i],
+              fill: new ol.style.Fill({
+              	color: '#fff'
+              })
+            })
+          }));
          i=i+1;
         }
       j=0;
@@ -65,25 +94,23 @@
 	    	ol.proj.fromLonLat(value)
 	  	),
 		});
+         marker[i].setStyle(new ol.style.Style({
+            image: new ol.style.Circle({
+              radius: 3+mag[i] ,
+              fill: new ol.style.Fill({
+                color: '#f98111'
+              })
+            }),
+            text: new ol.style.Text({
+              text: ""+mag[i],
+              fill: new ol.style.Fill({
+              	color: '#fff'
+              })
+            })
+          }));
          i=i+1;
          j=j+1;
       }
-      /*
-    	marker[0] = new ol.Feature({
-	  	 geometry: new ol.geom.Point(
-	    	ol.proj.fromLonLat(deathlist["0"])
-	  	),
-		});
-		marker[1] = new ol.Feature({
-	  	 geometry: new ol.geom.Point(
-	    	ol.proj.fromLonLat(afflist["0"])
-	  	),
-		});
-		marker[2] = new ol.Feature({
-	  	 geometry: new ol.geom.Point(
-	    	ol.proj.fromLonLat(afflist["1"])
-	  	),
-		});*/
       
 	var vectorSource = new ol.source.Vector({
 	  features: marker

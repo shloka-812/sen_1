@@ -48,6 +48,21 @@ l1=['back_pain','constipation','abdominal_pain','diarrhoea','mild_fever','yellow
 'silver_like_dusting','small_dents_in_nails','inflammatory_nails','blister','red_sore_around_nose',
 'yellow_crust_ooze']
 
+facts = ['When Syphilis first surfaced, the English called it the ‘French disease’, the French called it the ‘Spanish disease’, Germans called it the ‘French evil’, Russians called it ‘Polish disease’, Poles called it ‘Turkish disease’, Turks called it ‘Christian disease’ and Japan called it ‘Chinese pox.’',
+'After needing 13 liters of blood for a surgery at the age of 13, a man named James Harrison pledged to donate blood once he turned 18. It was discovered that his blood contained a rare antigen which cured Rhesus disease. He has donated blood a record 1,000 times and saved 2,000,000 lives.',
+'Farmers feed large magnets to cows to prevent “Hardware Disease.” Cow Magnets sit in their “stomach” for the lifetime of the cow and prevent accidentally eaten pieces of metal from lodging in the stomach folds causing illness.',
+'Scurvy was documented as a disease by Hippocrates, and Egyptians have recorded its symptoms as early as 1550 BC. The knowledge that consuming foods containing vitamin C is a cure for scurvy has been repeatedly rediscovered and forgotten into the early 20th century.',
+'Superior canal dehiscence is a rare medical condition that affects the inner ear and amplifies all internal sounds. It gets to the point where the sound of the eyeballs moving in their sockets sounds like “sandpaper on wood.”',
+'While many woodland creatures harbor ticks and spread Lyme disease, opossums kill 96.5% of ticks that land on them and that a single opossum may be “hoovering up and killing” 4,000 ticks every week and thereby protecting us from Lyme disease.',
+'During the AIDS epidemic of the 1980s, education about the disease was limited for political reasons. Surgeon General C. Everett Koop ended up infuriating members of both parties after he ordered that every home in America be mailed a letter explaining what AIDS was and how to protect from it.',
+'King Philip the Fair of France (1268-1314) made skin diseases a punishable offence. He thought lepers should be buried alive.',
+'The longest word in the Oxford Dictionary is pneumonoultramicroscopicsilicovolcanoconiosis, which is a 45-letter lung disease.',
+'SDLqPlayStation palmar hidradentitisSDRq is a skin disease caused by gripping the console too tight.',
+'Malaria was once used to treat syphilis. Dr. Wagner von Jauregg injected sufferers with malaria-infected blood, causing an extremely high fever that would ultimately kill the disease. Jauregg won the Nobel Prize for the treatment and it remained in use until the development of penicillin.',
+'Alzheimer’s disease does not affect emotional memory as strongly as informational memory. As a result, Alzheimer’s patients given bad news will quickly forget the news, but will remain sad and have no idea why.',
+'In 5,000 years of human history, only 2 diseases have been eradicated: smallpox and rinderpest.'
+]
+
 filename='da/modelpick'
 
 def prediction(request):
@@ -93,7 +108,8 @@ def prediction(request):
     
 
 def index(request):
-    return render(request,'da/index.html')
+    randchoice = np.random.randint(0,13)
+    return render(request,'da/index.html',{'fact':facts[randchoice]})
 
 @login_required
 def special(request):
