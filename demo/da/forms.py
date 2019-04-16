@@ -1,5 +1,5 @@
 from django import forms
-from da.models import UserProfileInfo,HospitalProfileInfo,PharmacyProfileInfo,disease_prediction
+from da.models import UserProfileInfo,HospitalProfileInfo,PharmacyProfileInfo,disease_prediction,outbreakform
 from django.contrib.auth.models import User
 
 class DiseaseForm(forms.ModelForm):
@@ -28,10 +28,11 @@ class PharmacyProfileInfoForm(forms.ModelForm):
 		model=PharmacyProfileInfo
 		fields=('pharmacy_name','pharmacy_city','pharmacy_address')
 
-class UserOutbreakInfoForm(forms.Form):
-	from_date = forms.DateField(label='Enter From date for outbreaks')
-	to_date = forms.DateField(label='Enter To date for outbreaks')
-	disease = forms.CharField(label='Disease Name',max_length=200)
+class UserOutbreakInfoForm(forms.ModelForm):
+	class Meta():
+		model=outbreakform
+		fields=('from_date','to_date','disease')
+
 
 
 

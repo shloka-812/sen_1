@@ -18,13 +18,13 @@
     <h2>Detected Outbreaks</h2>
     <form  method="post">
     	{% csrf_token %}
-    	{{ form }}
+    {{ form }}
     	<input type="submit" value="Submit">
 	</form>
 	<br>
-	<!--{% if request.POST %}
+	{% if request.POST %}
 	<p>Got values {{fromDate}} and {{toDate}} and {{diseaseName}} <br> </p>
-	{% endif %}-->
+	{% endif %}
 	<p>{{dq}}</p>
 	<p>{{dn}}</p>
 	<p>{{aq1}}</p>

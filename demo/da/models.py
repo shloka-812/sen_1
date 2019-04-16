@@ -23,6 +23,8 @@ l1=(('back_pain','back_pain'),('constipation','constipation')
 ('silver_like_dusting','silver_like_dusting'),('small_dents_in_nails','small_dents_in_nails'),('inflammatory_nails','inflammatory_nails'),('blister','blister'),('red_sore_around_nose','red_sore_around_nose'),
 ('yellow_crust_ooze','yellow_crust_ooze'))
 
+dis=(('Ebola','Ebola'),('Cholera','Cholera'),('Dengue','Dengue'),('Malaria','Malaria'))
+
 class UserProfileInfo(models.Model):
 	user=models.OneToOneField(User, on_delete=models.CASCADE)
 	first_name=models.CharField(max_length=100, default='')
@@ -45,7 +47,7 @@ class HospitalProfileInfo(models.Model):
 class PharmacyProfileInfo(models.Model):
 	pharmacy_user= models.OneToOneField(User, on_delete=models.CASCADE)
 	pharmacy_name= models.CharField(max_length=100, default='')
-	ppharmacy_city=models.CharField(max_length=100, default='')
+	pharmacy_city=models.CharField(max_length=100, default='')
 	pharmacy_address=models.TextField(max_length=200,default='')
 
 	def __str__(self):
@@ -56,7 +58,7 @@ class Outbreak(models.Model):
 	no_of_deaths = models.IntegerField(default=0)
 	no_of_affected = models.IntegerField(default=0)
 	location = models.CharField(max_length=100,default='')
-	date = models.DateField(verbose_name="date")
+	o_date = models.DateField(verbose_name="date")
 
 	def __str__(self):
 		return self.location
@@ -69,6 +71,10 @@ class disease_prediction(models.Model):
 	symptoms_5 = models.CharField(max_length=30, choices=l1)
 
 class outbreakform(models.Model):
+	from_date =  models.DateField(verbose_name="From Date")
+	to_date =  models.DateField(verbose_name="To Date")
+	disease = models.CharField(max_length=30, choices=dis)
+
 	
 
 

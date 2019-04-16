@@ -1,18 +1,16 @@
 import datetime
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from da.forms import UserForm,UserProfileInfoForm,HospitalProfileInfoForm,PharmacyProfileInfoForm,UserOutbreakInfoForm,DiseaseForm
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse,JsonResponse
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from .models import HospitalProfileInfo,PharmacyProfileInfo,Outbreak,disease_prediction
+from .models import HospitalProfileInfo,PharmacyProfileInfo,Outbreak,disease_prediction,outbreakform
 from django.contrib.auth.models import User
 import requests as rq
 import json
-from django.http import JsonResponse
 from django.contrib import messages
-from django.shortcuts import redirect
 import numpy as np
 import pandas as pd
 from sklearn import tree
@@ -49,6 +47,8 @@ l1=['back_pain','constipation','abdominal_pain','diarrhoea','mild_fever','yellow
 'palpitations','painful_walking','pus_filled_pimples','blackheads','scurring','skin_peeling',
 'silver_like_dusting','small_dents_in_nails','inflammatory_nails','blister','red_sore_around_nose',
 'yellow_crust_ooze']
+
+dis=['Ebola','Cholera','Dengue','Malaria']
 
 facts = ['When Syphilis first surfaced, the English called it the ‘French disease’, the French called it the ‘Spanish disease’, Germans called it the ‘French evil’, Russians called it ‘Polish disease’, Poles called it ‘Turkish disease’, Turks called it ‘Christian disease’ and Japan called it ‘Chinese pox.’',
 'After needing 13 liters of blood for a surgery at the age of 13, a man named James Harrison pledged to donate blood once he turned 18. It was discovered that his blood contained a rare antigen which cured Rhesus disease. He has donated blood a record 1,000 times and saved 2,000,000 lives.',
@@ -224,24 +224,11 @@ cityfile="da/citytocoord.csv"
 
 def outbreaks(request):
     if request.method == 'POST':
-        form = UserOutbreakInfoForm(request.POST)
+        form = UserOutbreakInfoForm(request.POST or None)
         if form.is_valid():
             fdf = request.POST.get('from_date')
             tdf = request.POST.get('to_date')
             dnf = request.POST.get('disease')
-            q = Outbreak.objects.all()
-            q1 = q.filter(date__lte=tdf)
-            q2 = q1.filter(date__gte=fdf)
-            q3 = q2.filter(disease_name=dnf)
-            print(q3)
-            if q3.exists():
-                queryset = q3
-            else:
-                if q2.exists():
-                    queryset = q2
-                else: 
-                    days100 = timezone.now() - datetime.timedelta(days=100)
-                    queryset = Outbreak.objects.filter(date__gte=days100)
             i=0
             j=0
             k=0
@@ -252,10 +239,15 @@ def outbreaks(request):
             anum1={}
             anum2={}
             avga=0
-            drefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_deaths) as no_deaths FROM da_Outbreak GROUP BY location')
-            #drefined = queryset.values('location').aggregate(no_deaths=Sum('location'))
-            arefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_affected) as no_affected FROM da_Outbreak GROUP BY location')
-            #arefined = queryset.values('location').aggregate(no_affected=Sum('location'))
+            queryset=Outbreak.objects.all()
+            if(fdf<tdf):
+                drefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_deaths) as no_deaths FROM (SELECT * FROM da_Outbreak WHERE (disease_name=%s AND o_date>%s AND o_date<%s)) GROUP BY location',[dnf,fdf,tdf] )
+                arefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_affected) as no_affected FROM (SELECT * FROM da_Outbreak WHERE (disease_name=%s AND o_date>%s AND o_date<%s)) GROUP BY location',[dnf,fdf,tdf] )
+            else :
+                days100 = timezone.now() - datetime.timedelta(days=100)
+                drefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_deaths) as no_deaths FROM (SELECT * FROM da_Outbreak WHERE o_date>%s) GROUP BY location',[days100])
+                arefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_affected) as no_affected FROM (SELECT * FROM da_Outbreak WHERE o_date>%s) GROUP BY location',[days100])
+        
             totala=0
             totalo=0
             for each in arefined:
@@ -271,7 +263,11 @@ def outbreaks(request):
                         if line == "":
                             break
                         words = line.split(',')
-                        if ((loc.lower() == words[0].lower()) or (loc.lower() == words[3].lower())):
+                        if (loc.lower() == words[0].lower()):
+                            lat=float(words[1])
+                            lng=float(words[2])
+                            break
+                        elif (loc.lower() == words[3].lower()):
                             lat=float(words[1])
                             lng=float(words[2])
                             break
@@ -288,7 +284,11 @@ def outbreaks(request):
                         if line == "":
                             break
                         words = line.split(',')
-                        if ((loc.lower() == words[0].lower()) or (loc.lower() == words[3].lower())):
+                        if (loc.lower() == words[0].lower()):
+                            lat=float(words[1])
+                            lng=float(words[2])
+                            break
+                        elif (loc.lower() == words[3].lower()):
                             lat=float(words[1])
                             lng=float(words[2])
                             break
@@ -303,8 +303,6 @@ def outbreaks(request):
                         k=k+1
             return render(request, 'da/outbreaks.html', {'dq':dloc,'aq1':aloc1,'aq2':aloc2,'dn':dnum,'an1':anum1,'an2':anum2,'form':form,'fromDate':fdf,'toDate':tdf,'diseaseName':dnf})
     else:
-        days100 = timezone.now() - datetime.timedelta(days=100)
-        queryset = Outbreak.objects.filter(date__gte=days100)
         i=0
         j=0
         k=0
@@ -315,26 +313,35 @@ def outbreaks(request):
         anum1={}
         anum2={}
         avga=0
-        drefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_deaths) as no_deaths FROM da_Outbreak GROUP BY location')
-        #drefined = queryset.values('location').aggregate(no_deaths=Sum('location'))
-        arefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_affected) as no_affected FROM da_Outbreak GROUP BY location')
-        #arefined = queryset.values('location').aggregate(no_affected=Sum('location'))
+        days100 = timezone.now() - datetime.timedelta(days=100)
+        queryset = Outbreak.objects.all()
+        drefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_deaths) as no_deaths FROM (SELECT * FROM da_Outbreak WHERE o_date>%s) GROUP BY location',[days100])
+        arefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_affected) as no_affected FROM (SELECT * FROM da_Outbreak WHERE o_date>%s) GROUP BY location',[days100])
         totala=0
         totalo=0
         for each in arefined:
             totala=totala+each.no_affected
             totalo=totalo+1
-        avga=totala/totalo
+        if totalo:
+            avga=totala/totalo
+        else:
+            avga=0
         for each in drefined:
                 loc = each.location
+                print(loc)
                 with open(cityfile, 'r') as f:
                     fields = f.readline()
                     while True:
                         line = f.readline()
                         if line == "":
                             break
-                        words = line.split(',')
-                        if ((loc.lower() == words[0].lower()) or (loc.lower() == words[3].lower())):
+                        words = line.rstrip().split(',')
+                        print(words)
+                        if (loc.lower() == words[0].lower()):
+                            lat=float(words[1])
+                            lng=float(words[2])
+                            break
+                        elif (loc.lower() == words[3].lower()):
                             lat=float(words[1])
                             lng=float(words[2])
                             break
@@ -344,14 +351,19 @@ def outbreaks(request):
                     i=i+1
         for each in arefined:
                 loc = each.location
+                print(loc)
                 with open(cityfile, 'r') as f:
                     fields = f.readline()
                     while True:
                         line = f.readline()
                         if line == "":
                             break
-                        words = line.split(',')
-                        if ((loc.lower() == words[0].lower()) or (loc.lower() == words[3].lower())):
+                        words = line.rstrip().split(',')
+                        if (loc.lower() == words[0].lower()):
+                            lat=float(words[1])
+                            lng=float(words[2])
+                            break
+                        elif (loc.lower() == words[3].lower()):
                             lat=float(words[1])
                             lng=float(words[2])
                             break
@@ -365,7 +377,6 @@ def outbreaks(request):
                         anum1[k] = each.no_affected
                         k=k+1
         form = UserOutbreakInfoForm()
-
     return render(request, 'da/outbreaks.html', {'dq':dloc,'aq1':aloc1,'aq2':aloc2,'dn':dnum,'an1':anum1,'an2':anum2,'form': form})
 
 def aboutus(request):
