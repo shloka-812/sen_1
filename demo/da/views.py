@@ -122,66 +122,77 @@ def user_logout(request):
     return HttpResponseRedirect(reverse('index'))
 
 def register(request):
-    registered = False
-    if request.method == 'POST':
-        user_form = UserForm(data=request.POST)
-        profile_form = UserProfileInfoForm(data=request.POST)
-        if user_form.is_valid() and profile_form.is_valid():
-            user = user_form.save()
-            user.set_password(user.password)
-            user.save()
-            profile = profile_form.save(commit=False)
-            profile.user = user
-            profile.save()
-            registered = True
-        else:
-            print(user_form.errors,profile_form.errors)
-
+    if request.user.is_authenticated():
+        messages.error(request,'You cannot register while you are already logged in!')
+        return HttpResponseRedirect(reverse('index'))
     else:
-        user_form = UserForm()
-        profile_form = UserProfileInfoForm()
-        
-    return render(request,'da/registration.html',{'user_form':user_form,'profile_form':profile_form,'registered':registered})
+        registered = False
+        if request.method == 'POST':
+            user_form = UserForm(data=request.POST)
+            profile_form = UserProfileInfoForm(data=request.POST)
+            if user_form.is_valid() and profile_form.is_valid():
+                user = user_form.save()
+                user.set_password(user.password)
+                user.save()
+                profile = profile_form.save(commit=False)
+                profile.user = user
+                profile.save()
+                registered = True
+            else:
+                print(user_form.errors,profile_form.errors)
+
+        else:
+            user_form = UserForm()
+            profile_form = UserProfileInfoForm()
+        return render(request,'da/registration.html',{'user_form':user_form,'profile_form':profile_form,'registered':registered})
 
 def register_h(request):
-    registered=False
-    if request.method == 'POST':
-        h_user_form = UserForm(data=request.POST)
-        h_profile_form = HospitalProfileInfoForm(data=request.POST)
-        if h_user_form.is_valid() and h_profile_form.is_valid():
-            hospital_user= h_user_form.save()
-            hospital_user.set_password(hospital_user.password)
-            hospital_user.save()
-            profile = h_profile_form.save(commit=False)
-            profile.hospital_user = hospital_user
-            profile.save()
-            registered = True
-        else:
-            print(h_user_form.errors,h_profile_form.errors)
+    if request.user.is_authenticated():
+        messages.error(request,'You cannot register while you are already logged in!')
+        return HttpResponseRedirect(reverse('index'))
     else:
-        h_user_form = UserForm()
-        h_profile_form = HospitalProfileInfoForm()
-    return render(request,'da/registration_h.html',{'h_user_form':h_user_form,'h_profile_form':h_profile_form,'registered':registered})
+        registered=False
+        if request.method == 'POST':
+            h_user_form = UserForm(data=request.POST)
+            h_profile_form = HospitalProfileInfoForm(data=request.POST)
+            if h_user_form.is_valid() and h_profile_form.is_valid():
+                hospital_user= h_user_form.save()
+                hospital_user.set_password(hospital_user.password)
+                hospital_user.save()
+                profile = h_profile_form.save(commit=False)
+                profile.hospital_user = hospital_user
+                profile.save()
+                registered = True
+            else:
+                print(h_user_form.errors,h_profile_form.errors)
+        else:
+            h_user_form = UserForm()
+            h_profile_form = HospitalProfileInfoForm()
+        return render(request,'da/registration_h.html',{'h_user_form':h_user_form,'h_profile_form':h_profile_form,'registered':registered})
 
 def register_p(request):
-    registered=False
-    if request.method == 'POST':
-        p_user_form = UserForm(data=request.POST)
-        p_profile_form = PharmacyProfileInfoForm(data=request.POST)
-        if p_user_form.is_valid() and p_profile_form.is_valid():
-            pharmacy_user= p_user_form.save()
-            pharmacy_user.set_password(pharmacy_user.password)
-            p_user.save()
-            profile = p_profile_form.save(commit=False)
-            profile.pharmacy_user = pharmacy_user
-            profile.save()
-            registered = True
-        else:
-            print(p_user_form.errors,p_profile_form.errors)
+    if request.user.is_authenticated():
+        messages.error(request,'You cannot register while you are already logged in!')
+        return HttpResponseRedirect(reverse('index'))
     else:
-        p_user_form = UserForm()
-        p_profile_form = PharmacyProfileInfoForm()
-    return render(request,'da/registration_p.html',{'p_user_form':p_user_form,'p_profile_form':p_profile_form,'registered':registered})
+        registered=False
+        if request.method == 'POST':
+            p_user_form = UserForm(data=request.POST)
+            p_profile_form = PharmacyProfileInfoForm(data=request.POST)
+            if p_user_form.is_valid() and p_profile_form.is_valid():
+                pharmacy_user= p_user_form.save()
+                pharmacy_user.set_password(pharmacy_user.password)
+                p_user.save()
+                profile = p_profile_form.save(commit=False)
+                profile.pharmacy_user = pharmacy_user
+                profile.save()
+                registered = True
+            else:
+                print(p_user_form.errors,p_profile_form.errors)
+        else:
+            p_user_form = UserForm()
+            p_profile_form = PharmacyProfileInfoForm()
+        return render(request,'da/registration_p.html',{'p_user_form':p_user_form,'p_profile_form':p_profile_form,'registered':registered})
 
 
 def user_login(request):
@@ -192,7 +203,7 @@ def user_login(request):
         if user:
             if user.is_active:
                 login(request,user)
-                messages.success(request,'success')
+                messages.success(request,'Sucessfully Logged in!')
                 return HttpResponseRedirect(reverse('index'))
             else:
                 messages.warning(request,'Sorry,your account is inactive')
