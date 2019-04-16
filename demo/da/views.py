@@ -237,51 +237,97 @@ def outbreaks(request):
                     queryset = Outbreak.objects.filter(date__gte=days100)
             i=0
             j=0
-            dloc ={}
-            aloc={}
+            k=0
+            dloc={}
+            aloc1={}
+            aloc2={}
             dnum={}
-            anum={}
-            for each in queryset:
+            anum1={}
+            anum2={}
+            avga=0
+            drefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_deaths) as no_deaths FROM da_Outbreak GROUP BY location')
+            arefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_affected) as no_affected FROM da_Outbreak GROUP BY location')
+            totala=0
+            totalo=0
+            for each in arefined:
+                totala=totala+each.no_affected
+                totalo=totalo+1
+            avga=totala/totalo
+            for each in drefined:
                 loc = each.location
                 cityobj = citymap.objects.filter(city=loc)
                 if cityobj.exists() == False:
                     cityobj = countrymap.objects.filter(country=loc)
                 if cityobj.exists():
-                    if each.no_of_deaths > 0:
+                    if each.no_deaths > 0:
                         dloc[i] = [cityobj[0].lng,cityobj[0].lat]
-                        dnum[i] = each.no_of_deaths
+                        dnum[i] = each.no_deaths
                         i=i+1
-                    if each.no_of_affected > 0 :
-                        aloc[j] = [cityobj[0].lng,cityobj[0].lat]
-                        anum[i] = each.no_of_affected
-                        j=j+1
-            return render(request, 'da/outbreaks.html', {'dq':dloc,'aq':aloc,'dn':dnum,'an':anum,'form':form,'fromDate':fdf,'toDate':tdf,'diseaseName':dnf})
+            for each in arefined:
+                loc = each.location
+                cityobj = citymap.objects.filter(city=loc)
+                if cityobj.exists() == False:
+                    cityobj = countrymap.objects.filter(country=loc)
+                if cityobj.exists():
+                    if each.no_affected > 0 :
+                        if each.no_affected > avga :
+                            aloc2[j] = [cityobj[0].lng,cityobj[0].lat]
+                            anum2[j] = each.no_affected
+                            j=j+1
+                        else:
+                            aloc1[k] = [cityobj[0].lng,cityobj[0].lat]
+                            anum1[k] = each.no_affected
+                            k=k+1
+            return render(request, 'da/outbreaks.html', {'dq':dloc,'aq1':aloc1,'aq2':aloc2,'dn':dnum,'an1':anum1,'an2':anum2,'form':form,'fromDate':fdf,'toDate':tdf,'diseaseName':dnf})
     else:
         days100 = timezone.now() - datetime.timedelta(days=100)
         queryset = Outbreak.objects.filter(date__gte=days100)
         i=0
         j=0
+        k=0
         dloc={}
-        aloc={}
+        aloc1={}
+        aloc2={}
         dnum={}
-        anum={}
-        for each in queryset:
+        anum1={}
+        anum2={}
+        avga=0
+        drefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_deaths) as no_deaths FROM da_Outbreak GROUP BY location')
+        arefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_affected) as no_affected FROM da_Outbreak GROUP BY location')
+        totala=0
+        totalo=0
+        for each in arefined:
+            totala=totala+each.no_affected
+            totalo=totalo+1
+        avga=totala/totalo
+        for each in drefined:
             loc = each.location
             cityobj = citymap.objects.filter(city=loc)
             if cityobj.exists() == False:
                 cityobj = countrymap.objects.filter(country=loc)
             if cityobj.exists():
-                if each.no_of_deaths > 0:
+                if each.no_deaths > 0:
                     dloc[i] = [cityobj[0].lng,cityobj[0].lat]
-                    dnum[i] = each.no_of_deaths
+                    dnum[i] = each.no_deaths
                     i=i+1
-                if each.no_of_affected > 0 :
-                    aloc[j] = [cityobj[0].lng,cityobj[0].lat]
-                    anum[i] = each.no_of_affected
-                    j=j+1
+        for each in arefined:
+            loc = each.location
+            cityobj = citymap.objects.filter(city=loc)
+            if cityobj.exists() == False:
+                cityobj = countrymap.objects.filter(country=loc)
+            if cityobj.exists():
+                if each.no_affected > 0 :
+                    if each.no_affected >avga :
+                        aloc2[j] = [cityobj[0].lng,cityobj[0].lat]
+                        anum2[j] = each.no_affected
+                        j=j+1
+                    else:
+                        aloc1[k] = [cityobj[0].lng,cityobj[0].lat]
+                        anum1[k] = each.no_affected
+                        k=k+1
         form = UserOutbreakInfoForm()
 
-    return render(request, 'da/outbreaks.html', {'dq':dloc,'aq':aloc,'dn':dnum,'an':anum,'form': form})
+    return render(request, 'da/outbreaks.html', {'dq':dloc,'aq1':aloc1,'aq2':aloc2,'dn':dnum,'an1':anum1,'an2':anum2,'form': form})
 
 def aboutus(request):
     return render(request,'da/aboutus.html')

@@ -59,7 +59,7 @@ class Outbreak(models.Model):
 	date = models.DateField(verbose_name="date")
 
 	def __str__(self):
-		return self.disease_name
+		return self.location
 
 class disease_prediction(models.Model):
 	symptoms_1 = models.CharField(max_length=30, choices=l1)
