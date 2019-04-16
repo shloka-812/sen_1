@@ -68,16 +68,6 @@ class disease_prediction(models.Model):
 	symptoms_4 = models.CharField(max_length=30, choices=l1)
 	symptoms_5 = models.CharField(max_length=30, choices=l1)
 
-class citymap(models.Model):
-	city = models.CharField(max_length=100)
-	lat = models.FloatField(default=0.0)
-	lng = models.FloatField(default=0.0)
-
-class countrymap(models.Model):
-	country = models.CharField(max_length=100)
-	lat = models.FloatField(default=0.0)
-	lng = models.FloatField(default=0.0)
-
 
 
 

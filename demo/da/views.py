@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from .models import Outbreak,HospitalProfileInfo,PharmacyProfileInfo,Outbreak,disease_prediction,citymap,countrymap
+from .models import Outbreak,HospitalProfileInfo,PharmacyProfileInfo,Outbreak,disease_prediction
 from django.contrib.auth.models import User
 import requests as rq
 import json
