@@ -21,10 +21,15 @@
     	{{ form }}
     	<input type="submit" value="Submit">
 	</form>
-	{% if request.POST %}
+	<!--{% if request.POST %}
 	<p>Got values {{fromDate}} and {{toDate}} and {{diseaseName}} <br> </p>
 	{% endif %}
-
+	<p>{{dq}}</p>
+	<p>{{dn}}</p>
+	<p>{{aq1}}</p>
+	<p>{{an1}}</p>
+	<p>{{aq2}}</p>
+	<p>{{an2}}</p>-->
     <div id="map" class="map"></div>
     <script type="text/javascript">
       //query: tuples that have from date ,to date and disease as specified by user, 
@@ -41,14 +46,102 @@
         })
       });
       var marker = new Array();
-      {% for eachquery in queries %}
+      var deathlist = {{dq}};
+      var afflist1 = {{aq1}};
+      var afflist2 = {{aq2}};
+      var dnum = {{dn}};
+      var anum1 = {{an1}};
+      var anum2 = {{an2}};
+      var mag = new Array();
+      i=0;
+      for (var temp in dnum) {
+      	var num=dnum[temp];
+      	mag[i]=num;
+      	i=i+1;
+      }
+      for (var temp in anum1) {
+      	var num=anum1[temp];
+      	mag[i]=num;
+      	i=i+1;
+      }
+      for (var temp in anum2) {
+      	var num=anum2[temp];
+      	mag[i]=num;
+      	i=i+1;
+      }
+      
+      i=0;
+      for (var key in deathlist){
+      	 var value = deathlist[key];
          marker[i] = new ol.Feature({
 	  	 geometry: new ol.geom.Point(
-	    	ol.proj.fromLonLat([-74.006,40.7127+i])
+	    	ol.proj.fromLonLat(value)
 	  	),
 		});
+         marker[i].setStyle(new ol.style.Style({
+            image: new ol.style.Circle({
+              radius: 4+mag[i]/2 ,
+              fill: new ol.style.Fill({
+                color: '#f00'
+              })
+            }),
+            text: new ol.style.Text({
+              text: ""+mag[i],
+              fill: new ol.style.Fill({
+              	color: '#000'
+              })
+            })
+          }));
          i=i+1;
-      {% endfor %}
+        }
+ 
+      for (var key in afflist1){
+      	 var value = afflist1[key];
+         marker[i] = new ol.Feature({
+	  	 geometry: new ol.geom.Point(
+	    	ol.proj.fromLonLat(value)
+	  	),
+		});
+         marker[i].setStyle(new ol.style.Style({
+            image: new ol.style.Circle({
+              radius: 4+mag[i]/2 ,
+              fill: new ol.style.Fill({
+                color: '#f9e504'
+              })
+            }),
+            text: new ol.style.Text({
+              text: ""+mag[i],
+              fill: new ol.style.Fill({
+              	color: '#000'
+              })
+            })
+          }));
+         i=i+1;
+      }
+
+      for (var key in afflist2){
+      	 var value = afflist2[key];
+         marker[i] = new ol.Feature({
+	  	 geometry: new ol.geom.Point(
+	    	ol.proj.fromLonLat(value)
+	  	),
+		});
+         marker[i].setStyle(new ol.style.Style({
+            image: new ol.style.Circle({
+              radius: 4+mag[i]/2 ,
+              fill: new ol.style.Fill({
+                color: '#f98111'
+              })
+            }),
+            text: new ol.style.Text({
+              text: ""+mag[i],
+              fill: new ol.style.Fill({
+              	color: '#000'
+              })
+            })
+          }));
+         i=i+1;
+      }
       
 	var vectorSource = new ol.source.Vector({
 	  features: marker
