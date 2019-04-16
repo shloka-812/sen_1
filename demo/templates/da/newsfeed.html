@@ -2,16 +2,16 @@
 {% load staticfiles %}
 {% block body_block %}
 
-<br><br><br>
-<div class="container">
-  <div class="jumbotron text-center">
+<br>
+<div class="transbox">
+  <div class="jumbotron" style="opacity:1;">
 <h2>Daily disease News</h2>
-{{sent}}
 </div>
 </div>
 
-<h2>Daily Disease News</h2>
-<div id="id01"></div>
+<div class="transbox">
+<div class= "jumbotron" id="id01"></div>
+</div>
 <script type="text/javascript">
 var None="";
 var newsr ={{ news |safe }};
@@ -37,5 +37,4 @@ for (var key in newsr){
 		}
 document.getElementById("id01").innerHTML = text;
 </script>
-<h1>value.source.name</h1>
 {% endblock %}

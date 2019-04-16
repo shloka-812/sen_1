@@ -1,15 +1,32 @@
 {% extends "da/base.html" %}
+{% load static %}
+{% load staticfiles %}
 {% block body_block %}
 
-<br><br><br>
-<div class="transbox">
+<br>
+<body id="indimg">
+<div class="container">
   <div class="jumbotron text-center">
-    <h1>Welcome to iHelp !</h1>
-    {% if user.is_authenticated %}
-        <h2>Hello {{ user.username }}</h2>
+  	<table>
+  		<tr>
+  	<td><img style="height:250px;width:250px" src="{% static '/da/images/logo.png'%}"></td>
+    <td><h2>Welcome to iHelpU!</h2>
+    	{% if user.is_authenticated %}
+        <h3>Hello {{ user.username }}</h3>
     {% else %}
     {% endif %}
- 
+    	<p style="font-size:15px;">This system uses multiple global data sources, hospital and pharmacy databases to identify outbreaks around the world. The goal is to provide a rapid identification system through daily monitoring and analysis of identified diseases and symptoms to ensure that users take precautions to avoid falling sick.</p>
+    
+</td></tr>
+</table>
   </div>
 </div>
+
+<div class="container">
+  <div class="jumbotron text-center">
+  	<h3>Did You Know?</h3>
+  	<p style="font-size:15px;">{{fact}}</p>
+  </div>
+</div>
+</body>
 {% endblock %}

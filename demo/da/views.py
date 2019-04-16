@@ -6,19 +6,13 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-<<<<<<< HEAD
-from .models import HospitalProfileInfo,PharmacyProfileInfo,Outbreak
-=======
-from .models import HospitalProfileInfo,PharmacyProfileInfo,Outbreak,disease_prediction,citymap,countrymap
->>>>>>> 7e7db6558bc7ea724b81942d89fdcd03ce5703e5
+from .models import HospitalProfileInfo,PharmacyProfileInfo,Outbreak,disease_prediction
 from django.contrib.auth.models import User
 import requests as rq
 import json
 from django.http import JsonResponse
-<<<<<<< HEAD
 from django.contrib import messages
 from django.shortcuts import redirect
-=======
 import numpy as np
 import pandas as pd
 from sklearn import tree
@@ -226,6 +220,8 @@ def newsfeed(request):
 def keyfacts(request):
     return render(request,'da/keyfacts.html')
 
+cityfile="da/citytocoord.csv"
+
 def outbreaks(request):
     if request.method == 'POST':
         form = UserOutbreakInfoForm(request.POST)
@@ -237,6 +233,7 @@ def outbreaks(request):
             q1 = q.filter(date__lte=tdf)
             q2 = q1.filter(date__gte=fdf)
             q3 = q2.filter(disease_name=dnf)
+            print(q3)
             if q3.exists():
                 queryset = q3
             else:
@@ -256,7 +253,9 @@ def outbreaks(request):
             anum2={}
             avga=0
             drefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_deaths) as no_deaths FROM da_Outbreak GROUP BY location')
+            #drefined = queryset.values('location').aggregate(no_deaths=Sum('location'))
             arefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_affected) as no_affected FROM da_Outbreak GROUP BY location')
+            #arefined = queryset.values('location').aggregate(no_affected=Sum('location'))
             totala=0
             totalo=0
             for each in arefined:
@@ -265,29 +264,43 @@ def outbreaks(request):
             avga=totala/totalo
             for each in drefined:
                 loc = each.location
-                cityobj = citymap.objects.filter(city=loc)
-                if cityobj.exists() == False:
-                    cityobj = countrymap.objects.filter(country=loc)
-                if cityobj.exists():
-                    if each.no_deaths > 0:
-                        dloc[i] = [cityobj[0].lng,cityobj[0].lat]
-                        dnum[i] = each.no_deaths
-                        i=i+1
+                with open(cityfile, 'r') as f:
+                    fields = f.readline()
+                    while True:
+                        line = f.readline()
+                        if line == "":
+                            break
+                        words = line.split(',')
+                        if ((loc.lower() == words[0].lower()) or (loc.lower() == words[3].lower())):
+                            lat=float(words[1])
+                            lng=float(words[2])
+                            break
+                if each.no_deaths > 0:
+                    dloc[i] = [lng,lat]
+                    dnum[i] = each.no_deaths
+                    i=i+1
             for each in arefined:
                 loc = each.location
-                cityobj = citymap.objects.filter(city=loc)
-                if cityobj.exists() == False:
-                    cityobj = countrymap.objects.filter(country=loc)
-                if cityobj.exists():
-                    if each.no_affected > 0 :
-                        if each.no_affected > avga :
-                            aloc2[j] = [cityobj[0].lng,cityobj[0].lat]
-                            anum2[j] = each.no_affected
-                            j=j+1
-                        else:
-                            aloc1[k] = [cityobj[0].lng,cityobj[0].lat]
-                            anum1[k] = each.no_affected
-                            k=k+1
+                with open(cityfile, 'r') as f:
+                    fields = f.readline()
+                    while True:
+                        line = f.readline()
+                        if line == "":
+                            break
+                        words = line.split(',')
+                        if ((loc.lower() == words[0].lower()) or (loc.lower() == words[3].lower())):
+                            lat=float(words[1])
+                            lng=float(words[2])
+                            break
+                if each.no_affected > 0 :
+                    if each.no_affected > avga :
+                        aloc2[j] = [lng,lat]
+                        anum2[j] = each.no_affected
+                        j=j+1
+                    else:
+                        aloc1[k] = [lng,lat]
+                        anum1[k] = each.no_affected
+                        k=k+1
             return render(request, 'da/outbreaks.html', {'dq':dloc,'aq1':aloc1,'aq2':aloc2,'dn':dnum,'an1':anum1,'an2':anum2,'form':form,'fromDate':fdf,'toDate':tdf,'diseaseName':dnf})
     else:
         days100 = timezone.now() - datetime.timedelta(days=100)
@@ -303,7 +316,9 @@ def outbreaks(request):
         anum2={}
         avga=0
         drefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_deaths) as no_deaths FROM da_Outbreak GROUP BY location')
+        #drefined = queryset.values('location').aggregate(no_deaths=Sum('location'))
         arefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_affected) as no_affected FROM da_Outbreak GROUP BY location')
+        #arefined = queryset.values('location').aggregate(no_affected=Sum('location'))
         totala=0
         totalo=0
         for each in arefined:
@@ -311,28 +326,42 @@ def outbreaks(request):
             totalo=totalo+1
         avga=totala/totalo
         for each in drefined:
-            loc = each.location
-            cityobj = citymap.objects.filter(city=loc)
-            if cityobj.exists() == False:
-                cityobj = countrymap.objects.filter(country=loc)
-            if cityobj.exists():
+                loc = each.location
+                with open(cityfile, 'r') as f:
+                    fields = f.readline()
+                    while True:
+                        line = f.readline()
+                        if line == "":
+                            break
+                        words = line.split(',')
+                        if ((loc.lower() == words[0].lower()) or (loc.lower() == words[3].lower())):
+                            lat=float(words[1])
+                            lng=float(words[2])
+                            break
                 if each.no_deaths > 0:
-                    dloc[i] = [cityobj[0].lng,cityobj[0].lat]
+                    dloc[i] = [lng,lat]
                     dnum[i] = each.no_deaths
                     i=i+1
         for each in arefined:
-            loc = each.location
-            cityobj = citymap.objects.filter(city=loc)
-            if cityobj.exists() == False:
-                cityobj = countrymap.objects.filter(country=loc)
-            if cityobj.exists():
+                loc = each.location
+                with open(cityfile, 'r') as f:
+                    fields = f.readline()
+                    while True:
+                        line = f.readline()
+                        if line == "":
+                            break
+                        words = line.split(',')
+                        if ((loc.lower() == words[0].lower()) or (loc.lower() == words[3].lower())):
+                            lat=float(words[1])
+                            lng=float(words[2])
+                            break
                 if each.no_affected > 0 :
-                    if each.no_affected >avga :
-                        aloc2[j] = [cityobj[0].lng,cityobj[0].lat]
+                    if each.no_affected > avga :
+                        aloc2[j] = [lng,lat]
                         anum2[j] = each.no_affected
                         j=j+1
                     else:
-                        aloc1[k] = [cityobj[0].lng,cityobj[0].lat]
+                        aloc1[k] = [lng,lat]
                         anum1[k] = each.no_affected
                         k=k+1
         form = UserOutbreakInfoForm()
@@ -378,4 +407,3 @@ def outbreak_submission(request):
     outbrk = Outbreak(disease_name=disease_name, no_of_deaths = no_of_deaths, no_of_affected=no_of_affected, location=location, date=date)
     outbrk.save()
     return render(request,'da/feed_data.html')
-

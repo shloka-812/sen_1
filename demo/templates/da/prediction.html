@@ -1,6 +1,8 @@
 {% extends 'da/base.html' %}
 {% load staticfiles %}
 {% block body_block %}
+
+	<div class="container">
 	<h1>Disease Prediction</h1>
 	{% if request.POST %}
 	<h2>Predicted disease : {{diseasepredicted}} <br> </h2>
@@ -12,4 +14,6 @@
     {{ form }}
     <input type="submit" value="Save">
 	</form>
+</div>
+
 {% endblock %}

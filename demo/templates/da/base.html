@@ -2,9 +2,13 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Base</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+     {% load static %}
+    
     <style>
 
       li {
@@ -45,8 +49,15 @@
       .dropdown:hover .dropdown-content {
         display: block;
       }
+
+      #indimg {
+          background-color: #7AB5CE;
+          ackground-image:url("{% static '/da/images/sky.png'%}");
+        }
+
       .bg { 
-      background-image:url("{% static '/da/images/google.jpg'%}");
+        background-color: #7AB5CE;
+    background-image:url("{% static '/da/images/sky.png'%}");
       width: 1200px;
       height:1040px;
       background-size: cover; /* or contain depending on what you want */
@@ -56,21 +67,20 @@
       padding:0;
 
       }
+
       div.transbox {
         background-color: #ffffff;
         opacity: 0.6;
         filter: alpha(opacity=60); /* For IE8 and earlier */
-          }
+
+        }
+        
     </style>
-    {% load static %}
     
     <link rel="stylesheet" type="text/css" href="{% static 'da/style.css' %}" />
 </head>
 
   <body class="bg">
-    <nav class="navbar navbar-default navbar-static-top">
-
-  <body>
     <nav class="navbar navbar-default navbar-static-top navbar-fixed-top">
 
       <div class="container">
@@ -78,15 +88,12 @@
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
-        <span class="icon-bar"></span>   
-        <span class="icon-bar"></span>   
-        <span class="icon-bar"></span>                        
+        <span class="icon-bar"></span>                       
       </button>
       <a class="navbar-brand" href="{% url 'index' %}">iHelp</a>
     </div>
         <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
-{# Django Home Link / Admin Link / Register Link#}
           <li><a class="navbar-link" href="{% url 'da:outbreaks' %}">View Outbreaks</a></li>
           <li><a class="navbar-link" href="{% url 'da:prediction' %}">Disease Prediction</a></li>
           <li><a class="navbar-link" href="{% url 'da:keyfacts' %}">Key Facts</a></li>
@@ -97,12 +104,11 @@
           <li class="dropdown">
             <a href="javascript:void(0)" class="dropbtn">Register</a>
             <div class="dropdown-content">
-              <a href="{% url 'da:register' %}">General Registeration</a>
+              <a href="{% url 'da:register' %}">General Registration</a>
               <a href="{% url 'da:register_h' %}">Hospital Registration</a>
               <a href="{% url 'da:register_p' %}">Pharmacy Registration</a>
             </div>
           </li>
-          {# Some logic on what to display for last item#}
           {% if user.is_authenticated %}
             <li><a href="{% url 'logout' %}">Logout</a></li>
           {% else %}
