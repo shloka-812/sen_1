@@ -223,6 +223,8 @@ def outbreaks(request):
             j=0
             dloc ={}
             aloc={}
+            dnum={}
+            anum={}
             for each in queryset:
                 loc = each.location
                 cityobj = citymap.objects.filter(city=loc)
@@ -231,11 +233,13 @@ def outbreaks(request):
                 if cityobj.exists():
                     if each.no_of_deaths > 0:
                         dloc[i] = [cityobj[0].lng,cityobj[0].lat]
+                        dnum[i] = each.no_of_deaths
                         i=i+1
                     if each.no_of_affected > 0 :
                         aloc[j] = [cityobj[0].lng,cityobj[0].lat]
+                        anum[i] = each.no_of_affected
                         j=j+1
-            return render(request, 'da/outbreaks.html', {'dq':dloc,'aq':aloc,'form':form,'fromDate':fdf,'toDate':tdf,'diseaseName':dnf})
+            return render(request, 'da/outbreaks.html', {'dq':dloc,'aq':aloc,'dn':dnum,'an':anum,'form':form,'fromDate':fdf,'toDate':tdf,'diseaseName':dnf})
     else:
         days100 = timezone.now() - datetime.timedelta(days=100)
         queryset = Outbreak.objects.filter(date__gte=days100)
@@ -243,6 +247,8 @@ def outbreaks(request):
         j=0
         dloc={}
         aloc={}
+        dnum={}
+        anum={}
         for each in queryset:
             loc = each.location
             cityobj = citymap.objects.filter(city=loc)
@@ -251,13 +257,15 @@ def outbreaks(request):
             if cityobj.exists():
                 if each.no_of_deaths > 0:
                     dloc[i] = [cityobj[0].lng,cityobj[0].lat]
+                    dnum[i] = each.no_of_deaths
                     i=i+1
                 if each.no_of_affected > 0 :
                     aloc[j] = [cityobj[0].lng,cityobj[0].lat]
+                    anum[i] = each.no_of_affected
                     j=j+1
         form = UserOutbreakInfoForm()
 
-    return render(request, 'da/outbreaks.html', {'dq':dloc,'aq':aloc,'form': form})
+    return render(request, 'da/outbreaks.html', {'dq':dloc,'aq':aloc,'dn':dnum,'an':anum,'form': form})
 
 def aboutus(request):
     return render(request,'da/aboutus.html')
