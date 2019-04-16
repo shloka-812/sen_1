@@ -2,12 +2,14 @@
 
 {% block body_block %}
 <br>
-<h2 align="center"> Sign up </h2><br>
-<table style="width:50%; background-color: #f2f2f2 " align="center" >
+<h2 align="center" style="color: white;"> Sign up </h2><br>
+<table style="width:50%; background-color: white; " align="center" >
     <tr>
         <td>
             {% if registered %}
-            <h1>Thank you for registering!</h1>
+           <h1>Thank you for registering!</h1>
+        <br>
+        <h3><a href="{% url 'da:user_login' %}">click here to login</a></h3>
             {% else %}
             
             
@@ -16,6 +18,7 @@
                 {{ user_form.as_p }}
                 {{ profile_form.as_p }}
                 <input type="submit" name="" value="Register">
+            <a href="{% url 'da:user_login' %}" style="align: center;">Already Registered? Click to Login</a>
                     </form>
         </td>
     </tr>
