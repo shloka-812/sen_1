@@ -1,19 +1,23 @@
 {% extends 'da/base.html' %}
 {% load staticfiles %}
 {% block body_block %}
-
-	<div class="container">
-	<h1>Disease Prediction</h1>
+<table style="width:50%; background-color: #f2f2f2; " align="center" >
+    <tr>
+    <td>
+	<h2 align="center" style="color: black;">Disease Prediction</h2>
 	{% if request.POST %}
-	<h2>Predicted disease : {{diseasepredicted}} <br> </h2>
+	<h2 align="center">Predicted disease : {{diseasepredicted}} <br><br> </h2>
 	{% endif %}
-	<h3>Select five symptoms from the below drop-downs to predict disease:<br></h3>
+	<h4>Select five symptoms from the below drop-downs to predict disease:<br></h4>
 	<br>
 	<form method="post">
 		{% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Save">
+    {{ form.as_p }}
+    <input type="submit" value="Predict">
 	</form>
-</div>
+</td>
+</tr>
+</table>
+
 
 {% endblock %}

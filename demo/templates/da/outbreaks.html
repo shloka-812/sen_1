@@ -12,16 +12,25 @@
       }
     </style>
     <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
-    <title>OpenLayers example</title>
+    <title>iHelpU-Outbreaks</title>
   </head>
-  <body>
-    <h2>Detected Outbreaks</h2>
-    <form  method="post">
+  <body style="background-color:#f2f2f2;background-image: none;">
+  	<div >
+  	<table style="width:50%;" align="center">
+  		<tr>
+  		<td>
+    <h2 align=center>Outbreak Detection</h2>
+    <form method="post">
     	{% csrf_token %}
-    {{ form }}
+    {{ form.as_p }}
     	<input type="submit" value="Submit">
 	</form>
+</td>
+</tr>
+</table>
+</div>
 	<br>
+	<!--
 	{% if request.POST %}
 	<p>Got values {{fromDate}} and {{toDate}} and {{diseaseName}} <br> </p>
 	{% endif %}
@@ -30,7 +39,7 @@
 	<p>{{aq1}}</p>
 	<p>{{an1}}</p>
 	<p>{{aq2}}</p>
-	<p>{{an2}}</p>
+	<p>{{an2}}</p>-->
     <div id="map" class="map"></div>
     <script type="text/javascript">
       //query: tuples that have from date ,to date and disease as specified by user, 
@@ -150,6 +159,7 @@
 	var markerVectorLayer = new ol.layer.Vector({
 	  source: vectorSource,
 	});
+
 	map.addLayer(markerVectorLayer);
     </script>
     <br><br>

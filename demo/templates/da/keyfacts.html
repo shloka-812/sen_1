@@ -1,10 +1,12 @@
 {% extends "da/base.html" %}
 {% load staticfiles %}
 {% block body_block %}
+<body class="bg ">
+	<div class="jumbotron">
 <div id="top"></div>
-<h1>Disease Key Facts</h1>
+<h2>Disease Key Facts</h2>
 
-<p> This page provides information related to the symptoms, causes, diagnosis and prevention of some outbreak causing diseases. </p>
+<p style="font-size:18px;"> This page provides information related to the symptoms, causes, diagnosis and prevention of some outbreak causing diseases. </p>
 
 <p> <a href="#ebola">Ebola</a> | <a href="#chik">Chikungunya Fever</a> | <a href="#chol">Cholera</a> | <a href="#cchf">CCHF</a> | <a href="#men">Meningitis</a> | <a href="#niv">Nipah Virus Infection</a> | <a href="#plague">Plague</a> | <a href="#sars">SARS</a> | <a href="#sf">Swine Flu</a> | <a href="#yf">Yellow Fever</a> | <a href="#zv">Zika virus disease</a>
 
@@ -576,5 +578,6 @@ Precautionary measures for pregnant women and women considering pregnancy recomm
 Vaccine – Currently there is no vaccine available for prevention of Zika virus disease. According to WHO around 15 pharmaceutical companies have commenced work in this direction. A DNA vaccine from the US National Institutes of Health and an inactivated product from Bharat Biotech in India are at advanced stage. Further vaccines will take at least 18 months for any large-scale trials*.
 <br>7. Monitoring-Joint Monitoring group under DGHS is monitoring the situation on regular basis.
 </div>
-
+</div>
+</body>
 {% endblock %}

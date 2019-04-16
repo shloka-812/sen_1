@@ -122,7 +122,7 @@ def user_logout(request):
     return HttpResponseRedirect(reverse('index'))
 
 def register(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         messages.error(request,'You cannot register while you are already logged in!')
         return HttpResponseRedirect(reverse('index'))
     else:
@@ -147,7 +147,7 @@ def register(request):
         return render(request,'da/registration.html',{'user_form':user_form,'profile_form':profile_form,'registered':registered})
 
 def register_h(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         messages.error(request,'You cannot register while you are already logged in!')
         return HttpResponseRedirect(reverse('index'))
     else:
@@ -171,7 +171,7 @@ def register_h(request):
         return render(request,'da/registration_h.html',{'h_user_form':h_user_form,'h_profile_form':h_profile_form,'registered':registered})
 
 def register_p(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         messages.error(request,'You cannot register while you are already logged in!')
         return HttpResponseRedirect(reverse('index'))
     else:

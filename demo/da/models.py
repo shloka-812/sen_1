@@ -39,7 +39,7 @@ class HospitalProfileInfo(models.Model):
 	hospital_user=models.OneToOneField(User, on_delete=models.CASCADE)
 	hospital_name=models.CharField(max_length=100, default='')
 	hospital_city=models.CharField(max_length=100, default='')
-	hospital_address=models.TextField(max_length=200,default='')
+	hospital_address=models.CharField(max_length=200,default='')
 
 	def __str__(self):
 		return self.hospital_user.username
@@ -48,7 +48,7 @@ class PharmacyProfileInfo(models.Model):
 	pharmacy_user= models.OneToOneField(User, on_delete=models.CASCADE)
 	pharmacy_name= models.CharField(max_length=100, default='')
 	pharmacy_city=models.CharField(max_length=100, default='')
-	pharmacy_address=models.TextField(max_length=200,default='')
+	pharmacy_address=models.CharField(max_length=200,default='')
 
 	def __str__(self):
 		return self.pharmacy_user.username

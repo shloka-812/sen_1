@@ -26,6 +26,10 @@
       li.dropdown {
         display: inline-block;
       }
+      .nobg {
+        background-color:#f2f2f2;
+        background-image: none;
+      }
 
       .dropdown-content {
         display: none;
@@ -50,21 +54,17 @@
         display: block;
       }
 
-      #indimg {
-          background-color: #7AB5CE;
-          ackground-image:url("{% static '/da/images/sky.png'%}");
-        }
 
       .bg { 
-        background-color: #7AB5CE;
-    background-image:url("{% static '/da/images/sky.png'%}");
-      width: 1200px;
-      height:1040px;
-      background-size: cover; /* or contain depending on what you want */
-      background-position: center;
-      background-repeat: no-repeat;
-      margin:auto;
-      padding:0;
+        background-image:url("{% static '/da/images/med.jpg'%}");
+        background-repeat: repeat;
+        width: 1200px;
+        height:1040px;
+        background-size: cover; /* or contain depending on what you want */
+        background-position: center;
+        background-repeat: no-repeat;
+        margin:auto;
+        padding:0;
 
       }
 
@@ -81,7 +81,7 @@
 </head>
 
   <body class="bg">
-    <nav class="navbar navbar-default navbar-static-top navbar-fixed-top">
+    <nav class="navbar navbar-default navbar-static-top navbar-fixed-top" style="background-color: black;" >
 
       <div class="container">
         <div class="navbar-header">
@@ -117,15 +117,19 @@
       </ul>
       </div>
       </div>
+    </nav>
+    <div>
+
       {% if messages %}
     {% for message in messages %}
+        <br><br><br><br><br>
          <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{message.tags}}{% endif %}" role="alert">
             {{message}}
         </div>
     {% endfor %}
 {% endif %}
-    </nav>
-    <br><br><br><br>
+</div>
+    <br><br><br>
     <div class="container">
     {% block body_block %}
     {% endblock %}
