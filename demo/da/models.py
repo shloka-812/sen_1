@@ -25,8 +25,8 @@ l1=(('back_pain','back_pain'),('constipation','constipation')
 
 class UserProfileInfo(models.Model):
 	user=models.OneToOneField(User, on_delete=models.CASCADE)
-	fname=models.CharField(max_length=100, default='')
-	lname=models.CharField(max_length=100, default='')
+	first_name=models.CharField(max_length=100, default='')
+	last_name=models.CharField(max_length=100, default='')
 	city = models.CharField(max_length=100, default='')
 	dob = models.DateField(blank=True,null=True,verbose_name="dob")
 
@@ -34,22 +34,22 @@ class UserProfileInfo(models.Model):
 		return self.user.username
 
 class HospitalProfileInfo(models.Model):
-	h_user=models.OneToOneField(User, on_delete=models.CASCADE)
-	h_name=models.CharField(max_length=100, default='')
-	h_city=models.CharField(max_length=100, default='')
-	h_address=models.TextField(max_length=200,default='')
+	hospital_user=models.OneToOneField(User, on_delete=models.CASCADE)
+	hospital_name=models.CharField(max_length=100, default='')
+	hospital_city=models.CharField(max_length=100, default='')
+	hospital_address=models.TextField(max_length=200,default='')
 
 	def __str__(self):
-		return self.h_user.username
+		return self.hospital_user.username
 
 class PharmacyProfileInfo(models.Model):
-	p_user= models.OneToOneField(User, on_delete=models.CASCADE)
-	p_name= models.CharField(max_length=100, default='')
-	p_city=models.CharField(max_length=100, default='')
-	p_address=models.TextField(max_length=200,default='')
+	pharmacy_user= models.OneToOneField(User, on_delete=models.CASCADE)
+	pharmacy_name= models.CharField(max_length=100, default='')
+	ppharmacy_city=models.CharField(max_length=100, default='')
+	pharmacy_address=models.TextField(max_length=200,default='')
 
 	def __str__(self):
-		return self.p_user.username
+		return self.pharmacy_user.username
 
 class Outbreak(models.Model):
 	disease_name =models.CharField(max_length=100,default='')

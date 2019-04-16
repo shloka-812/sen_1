@@ -16,17 +16,17 @@ class UserForm(forms.ModelForm):
 class UserProfileInfoForm(forms.ModelForm):
 	class Meta():
 		model=UserProfileInfo
-		fields=('fname','lname','city','dob')
+		fields=('first_name','last_name','city','dob')
 
 class HospitalProfileInfoForm(forms.ModelForm):
 	class Meta():
 		model=HospitalProfileInfo
-		fields=('h_name','h_city','h_address')
+		fields=('hospital_name','hospital_city','hospital_address')
 
 class PharmacyProfileInfoForm(forms.ModelForm):
 	class Meta():
 		model=PharmacyProfileInfo
-		fields=('p_name','p_city','p_address')
+		fields=('pharmacy_name','pharmacy_city','pharmacy_address')
 
 class UserOutbreakInfoForm(forms.Form):
 	from_date = forms.DateField(label='Enter From date for outbreaks')

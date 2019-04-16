@@ -95,8 +95,6 @@ def prediction(request):
             inputtest = [l2]
             predict = loaded_model.predict(inputtest)
             predicted=predict[0]
->>>>>>> 7e7db6558bc7ea724b81942d89fdcd03ce5703e5
-
             h='no'
 
             for a in range (0, len(disease)):
@@ -157,11 +155,11 @@ def register_h(request):
         h_user_form = UserForm(data=request.POST)
         h_profile_form = HospitalProfileInfoForm(data=request.POST)
         if h_user_form.is_valid() and h_profile_form.is_valid():
-            h_user= h_user_form.save()
-            h_user.set_password(h_user.password)
-            h_user.save()
+            hospital_user= h_user_form.save()
+            hospital_user.set_password(hospital_user.password)
+            hospital_user.save()
             profile = h_profile_form.save(commit=False)
-            profile.h_user = h_user
+            profile.hospital_user = hospital_user
             profile.save()
             registered = True
         else:
@@ -177,11 +175,11 @@ def register_p(request):
         p_user_form = UserForm(data=request.POST)
         p_profile_form = PharmacyProfileInfoForm(data=request.POST)
         if p_user_form.is_valid() and p_profile_form.is_valid():
-            p_user= p_user_form.save()
-            p_user.set_password(p_user.password)
+            pharmacy_user= p_user_form.save()
+            pharmacy_user.set_password(pharmacy_user.password)
             p_user.save()
             profile = p_profile_form.save(commit=False)
-            profile.p_user = p_user
+            profile.pharmacy_user = pharmacy_user
             profile.save()
             registered = True
         else:
@@ -352,8 +350,8 @@ def feeddata(request):
     if request.user.is_authenticated:
         username = request.user
         try:
-            h=HospitalProfileInfo.objects.filter(h_user = username)
-            p=PharmacyProfileInfo.objects.filter(p_user = username)
+            h=HospitalProfileInfo.objects.filter(hospital_user = username)
+            p=PharmacyProfileInfo.objects.filter(pharmacy_user = username)
             if h.exists() or p.exists():
                 return render(request,'da/feed_data.html')
 
