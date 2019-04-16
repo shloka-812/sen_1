@@ -68,6 +68,9 @@ class disease_prediction(models.Model):
 	symptoms_4 = models.CharField(max_length=30, choices=l1)
 	symptoms_5 = models.CharField(max_length=30, choices=l1)
 
+class outbreakform(models.Model):
+	
+
 
 
 

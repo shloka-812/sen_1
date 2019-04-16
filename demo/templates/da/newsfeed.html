@@ -1,23 +1,21 @@
 {% extends "da/base.html" %}
 {% load staticfiles %}
 {% block body_block %}
-<<<<<<< HEAD
-<br><br><br>
-<div class="container">
-  <div class="jumbotron text-center">
+<br>
+<div class="transbox">
+  <div class="jumbotron" style="opacity:1;">
 <h2>Daily disease News</h2>
-{{sent}}
 </div>
 </div>
-=======
-<h2>Daily Disease News</h2>
-<div id="id01"></div>
+
+<div class="transbox">
+<div class= "jumbotron" id="id01"></div>
+</div>
 <script type="text/javascript">
 var None="";
 var newsr ={{ news |safe }};
 var text = "";
 count = 0;
->>>>>>> 7e7db6558bc7ea724b81942d89fdcd03ce5703e5
 
 for (var key in newsr){
       	 var value = newsr[key];
@@ -38,5 +36,4 @@ for (var key in newsr){
 		}
 document.getElementById("id01").innerHTML = text;
 </script>
-<h1>value.source.name</h1>
 {% endblock %}
