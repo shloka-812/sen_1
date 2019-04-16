@@ -45,17 +45,44 @@
       .dropdown:hover .dropdown-content {
         display: block;
       }
+      .bg { 
+      background-image:url("{% static '/da/images/google.jpg'%}");
+      width: 1200px;
+       height:1040px;
+ 
+      background-size: cover; /* or contain depending on what you want */
+      background-position: center;
+      background-repeat: no-repeat;
+      margin:auto;
+      padding:0;
+
+      }
+          div.transbox {
+          background-color: #ffffff;
+          opacity: 0.6;
+          filter: alpha(opacity=60); /* For IE8 and earlier */
+          }
     </style>
     {% load static %}
     
     <link rel="stylesheet" type="text/css" href="{% static 'da/style.css' %}" />
 </head>
-  <body>
+  <body class="bg">
     <nav class="navbar navbar-default navbar-static-top">
       <div class="container">
+        <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>   
+        <span class="icon-bar"></span>   
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="{% url 'index' %}">iHelp</a>
+    </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
 {# Django Home Link / Admin Link / Register Link#}
-          <li><a class="navbar-brand" href="{% url 'index' %}">iHelp</a></li>
           <li><a class="navbar-link" href="{% url 'da:outbreaks' %}">View Outbreaks</a></li>
           <li><a class="navbar-link" href="{% url 'da:prediction' %}">Disease Prediction</a></li>
           <li><a class="navbar-link" href="{% url 'da:keyfacts' %}">Key Facts</a></li>
@@ -77,8 +104,16 @@
           {% else %}
             <li><a class="navbar-link" href="{% url 'da:user_login' %}">Login</a></li>
           {% endif %}
-</ul>
+      </ul>
       </div>
+      </div>
+      {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-warning" role="alert">
+            {{message}}
+        </div>
+    {% endfor %}
+{% endif %}
     </nav>
     <div class="container">
     {% block body_block %}

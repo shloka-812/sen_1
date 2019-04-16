@@ -2,12 +2,14 @@
 {% load staticfiles %}
 {% block body_block %}
 <br>
-<h2 align="center"> Sign up </h2><br>
+<h2 align="center" style="font-family: georgia;"> Hospital SignUp </h2>
+<br>
 <table style="width:50%; background-color: #f2f2f2 " align="center" >
     <tr>
         <td>
             {% if registered %}
             <h1>Thank you for registering!</h1>
+
             {% else %}
             
             <form enctype="multipart/form-data" method="POST">
@@ -15,7 +17,8 @@
                 {{ h_user_form.as_p }}
                 {{ h_profile_form.as_p }}
                 <input type="submit" name="" value="Register">
-                    </form>
+            <a href="{% url 'da:user_login' %}" style="align: center;">Already Registered? Click to Login</a>
+            </form>
         </td>
     </tr>
 </table>

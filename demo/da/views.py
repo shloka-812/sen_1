@@ -5,11 +5,13 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from .models import Outbreak,HospitalProfileInfo,PharmacyProfileInfo,Outbreak
+from .models import HospitalProfileInfo,PharmacyProfileInfo,Outbreak
 from django.contrib.auth.models import User
 import requests as rq
 import json
 from django.http import JsonResponse
+from django.contrib import messages
+from django.shortcuts import redirect
 
 
 def index(request):
@@ -95,13 +97,16 @@ def user_login(request):
         if user:
             if user.is_active:
                 login(request,user)
+                messages.success(request,'success')
                 return HttpResponseRedirect(reverse('index'))
             else:
-                return HttpResponse("Your account was inactive.")
+                messages.warning(request,'Sorry,your account is inactive')
+                return redirect('index')
         else:
             print("Someone tried to login and failed.")
             print("They used username: {} and password:{}".format(username,password))
-            return HttpResponse("Invalid login details given")
+            messages.warning(request,'Invalid Login details!')
+            return redirect('index')
 
     else:
         return render(request, 'da/login.html', {})
@@ -163,16 +168,23 @@ def feeddata(request):
     username = None
     if request.user.is_authenticated():
         username = request.user
-    try:
-        h=HospitalProfileInfo.objects.filter(h_user = username)
-        p=PharmacyProfileInfo.objects.filter(p_user = username)
-        if h.exists() or p.exists():
-            return render(request,'da/feed_data.html')
+        try:
+            h=HospitalProfileInfo.objects.filter(h_user = username)
+            p=PharmacyProfileInfo.objects.filter(p_user = username)
+            if h.exists() or p.exists():
+                return render(request,'da/feed_data.html')
 
-        else:
-            return HttpResponse("sorry u cant enter the data")
-    except HospitalProfileInfo.DoesNotExist:
-        return HttpResponse("sorry u cant enter the data")
+            else:
+                messages.warning(request,'Sorry, you cannot enter the data as you are not a Hospital/Pharmacy')
+                return redirect('index')
+
+        except HospitalProfileInfo.DoesNotExist:
+            messages.warning(request,'profile DoesNotExist')
+            return redirect('index')
+    else:
+        messages.warning(request,'please login to feed data')
+        return redirect('index')
+
 
 
 def outbreak_submission(request):
