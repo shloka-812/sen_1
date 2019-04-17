@@ -6,7 +6,7 @@
 <br>
     {% if user.is_authenticated %}
         
-        <table style="width:50%; background-color: #f2f2f2 " align="center" >
+        <table style="width:50%; background-color: #f2f2f2; border-radius:5px;" align="center" >
 		<tr>
 		<td>
                <h2 align="center" style="font-family: georgia;"> Feed Data </h2>
@@ -29,7 +29,7 @@
     <label for="date">Date Of Entry</label><br>
     <input style="width:100%;" type="Date" id="date" name="date">
     <br><br>
-    <input type="submit" value="Submit">
+    <input id="id_feeddata" type="submit" value="Submit">
   	</form>
 	</td>
 	</tr>

@@ -2,11 +2,11 @@
 {% block body_block %}
 
  <br>
-   <h2 align="center" style="font-family: georgia; color: white;"> Login </h2>
    <br>
-<table style="width:50%; background-color: white " align="center" >
+<table style="width:50%; background-color: #f2f2f2; border-radius:5px;" align="center" >
     <tr>
         <td>
+            <h2 align="center" style="font-family: georgia;"> Login </h2>
             <form method="post" action="{% url 'da:user_login' %}">
                 {% csrf_token %}
                 {# A more "HTML" way of creating the login form#}
@@ -14,7 +14,7 @@
                 <input type="text" name="username" placeholder="Username">
                     <label for="password">Password:</label>
                     <input type="password" name="password" placeholder="Password">
-                        <input type="submit" name="" value="Login">
+                        <input id="id_login" type="submit" name="" value="Login">
             </form>
         </td>
     </tr>

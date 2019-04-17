@@ -108,7 +108,6 @@ def prediction(request):
     
     return render(request,'da/prediction.html',{'form': form})
     
-
 def index(request):
     randchoice = np.random.randint(0,13)
     return render(request,'da/index.html',{'fact':facts[randchoice]})
