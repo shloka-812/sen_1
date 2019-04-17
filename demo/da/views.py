@@ -182,7 +182,7 @@ def register_p(request):
             if p_user_form.is_valid() and p_profile_form.is_valid():
                 pharmacy_user= p_user_form.save()
                 pharmacy_user.set_password(pharmacy_user.password)
-                p_user.save()
+                pharmacy_user.save()
                 profile = p_profile_form.save(commit=False)
                 profile.pharmacy_user = pharmacy_user
                 profile.save()
@@ -255,7 +255,7 @@ def outbreaks(request):
                 drefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_deaths) as no_deaths FROM (SELECT * FROM da_Outbreak WHERE (disease_name=%s AND o_date>%s AND o_date<%s)) AS foo GROUP BY location',[dnf,fdf,tdf] )
                 arefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_affected) as no_affected FROM (SELECT * FROM da_Outbreak WHERE (disease_name=%s AND o_date>%s AND o_date<%s)) AS foo GROUP BY location',[dnf,fdf,tdf] )
             else :
-                days100 = timezone.now() - datetime.timedelta(days=100)
+                days100 = timezone.now() - datetime.timedelta(days=400)
                 drefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_deaths) as no_deaths FROM (SELECT * FROM da_Outbreak WHERE o_date>%s) AS foo GROUP BY location',[days100])
                 arefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_affected) as no_affected FROM (SELECT * FROM da_Outbreak WHERE o_date>%s) AS foo GROUP BY location',[days100])
         
@@ -269,6 +269,7 @@ def outbreaks(request):
             else:
                 avga=0
             for each in drefined:
+                found=0
                 loc = each.location
                 with open(cityfile, 'r') as f:
                     fields = f.readline()
@@ -278,19 +279,23 @@ def outbreaks(request):
                             break
                         words = line.split(',')
                         if (loc.lower() == words[0].lower()):
+                            found=1
                             lat=float(words[1])
                             lng=float(words[2])
                             break
                         elif (loc.lower() == words[3].lower()):
+                            found=1
                             lat=float(words[1])
                             lng=float(words[2])
                             break
-                if each.no_deaths > 0:
-                    dloc[i] = [lng,lat]
-                    dnum[i] = each.no_deaths
-                    i=i+1
+                if found:
+                    if each.no_deaths > 0:
+                        dloc[i] = [lng,lat]
+                        dnum[i] = each.no_deaths
+                        i=i+1
             for each in arefined:
                 loc = each.location
+                found=0
                 with open(cityfile, 'r') as f:
                     fields = f.readline()
                     while True:
@@ -299,22 +304,25 @@ def outbreaks(request):
                             break
                         words = line.split(',')
                         if (loc.lower() == words[0].lower()):
+                            found=1
                             lat=float(words[1])
                             lng=float(words[2])
                             break
                         elif (loc.lower() == words[3].lower()):
+                            found=1
                             lat=float(words[1])
                             lng=float(words[2])
                             break
-                if each.no_affected > 0 :
-                    if each.no_affected > avga :
-                        aloc2[j] = [lng,lat]
-                        anum2[j] = each.no_affected
-                        j=j+1
-                    else:
-                        aloc1[k] = [lng,lat]
-                        anum1[k] = each.no_affected
-                        k=k+1
+                if found:
+                    if each.no_affected > 0 :
+                        if each.no_affected > avga :
+                            aloc2[j] = [lng,lat]
+                            anum2[j] = each.no_affected
+                            j=j+1
+                        else:
+                            aloc1[k] = [lng,lat]
+                            anum1[k] = each.no_affected
+                            k=k+1
             return render(request, 'da/outbreaks.html', {'dq':dloc,'aq1':aloc1,'aq2':aloc2,'dn':dnum,'an1':anum1,'an2':anum2,'form':form,'fromDate':fdf,'toDate':tdf,'diseaseName':dnf})
     else:
         i=0
@@ -327,10 +335,13 @@ def outbreaks(request):
         anum1={}
         anum2={}
         avga=0
-        days100 = timezone.now() - datetime.timedelta(days=100)
+        days100 = timezone.now() - datetime.timedelta(days=400)
         queryset = Outbreak.objects.all()
         drefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_deaths) as no_deaths FROM (SELECT * FROM da_Outbreak WHERE o_date>%s) AS foo GROUP BY location',[days100])
         arefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_affected) as no_affected FROM (SELECT * FROM da_Outbreak WHERE o_date>%s) AS foo GROUP BY location',[days100])
+        #drefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_deaths) as no_deaths FROM da_Outbreak GROUP BY location')
+        #arefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_affected) as no_affected FROM da_Outbreak GROUP BY location')
+        
         totala=0
         totalo=0
         for each in arefined:
@@ -341,6 +352,7 @@ def outbreaks(request):
         else:
             avga=0
         for each in drefined:
+                found=0
                 loc = each.location
                 with open(cityfile, 'r') as f:
                     fields = f.readline()
@@ -351,18 +363,22 @@ def outbreaks(request):
                         words = line.rstrip().split(',')
                         print(words)
                         if (loc.lower() == words[0].lower()):
+                            found=1
                             lat=float(words[1])
                             lng=float(words[2])
                             break
                         elif (loc.lower() == words[3].lower()):
+                            found=1
                             lat=float(words[1])
                             lng=float(words[2])
                             break
-                if each.no_deaths > 0:
-                    dloc[i] = [lng,lat]
-                    dnum[i] = each.no_deaths
-                    i=i+1
+                if found:
+                    if each.no_deaths > 0:
+                        dloc[i] = [lng,lat]
+                        dnum[i] = each.no_deaths
+                        i=i+1
         for each in arefined:
+                found=0
                 loc = each.location
                 print(loc)
                 with open(cityfile, 'r') as f:
@@ -373,22 +389,25 @@ def outbreaks(request):
                             break
                         words = line.rstrip().split(',')
                         if (loc.lower() == words[0].lower()):
+                            found=1
                             lat=float(words[1])
                             lng=float(words[2])
                             break
                         elif (loc.lower() == words[3].lower()):
+                            found=1
                             lat=float(words[1])
                             lng=float(words[2])
                             break
-                if each.no_affected > 0 :
-                    if each.no_affected > avga :
-                        aloc2[j] = [lng,lat]
-                        anum2[j] = each.no_affected
-                        j=j+1
-                    else:
-                        aloc1[k] = [lng,lat]
-                        anum1[k] = each.no_affected
-                        k=k+1
+                if found:
+                    if each.no_affected > 0 :
+                        if each.no_affected > avga :
+                            aloc2[j] = [lng,lat]
+                            anum2[j] = each.no_affected
+                            j=j+1
+                        else:
+                            aloc1[k] = [lng,lat]
+                            anum1[k] = each.no_affected
+                            k=k+1
         form = UserOutbreakInfoForm()
     return render(request, 'da/outbreaks.html', {'dq':dloc,'aq1':aloc1,'aq2':aloc2,'dn':dnum,'an1':anum1,'an2':anum2,'form': form})
 
