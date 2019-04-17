@@ -9,17 +9,23 @@
       .map {
         height: 100%;
         width: 100%;
+        background-color: #fff;
+    	padding: 7px;
+    	border-radius:3px;
       }
     </style>
     <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
     <title>iHelpU-Outbreaks</title>
   </head>
-  <body style="background-color:#f2f2f2;background-image: none;">
-  	<div >
-  	<table style="width:50%;" align="center">
+  <body style="background-color:#e3e5e8;background-image: none;">
+  	<div>
+  		<br>
+  		<h2 align=center style="font-family: Georgia;">Outbreak Detection</h2>
+  	<table style="width:80%;" align="center">
   		<tr>
-  		<td>
-    <h2 align=center>Outbreak Detection</h2>
+  			<td style="width:35%;font-family: Georgia;text-align:justify;"><h4 style="font-family: Georgia; line-height:40px;"> The following map shows the magnitude of people affected by outbreaks in the past 3 months. A red circle indicates the number of deaths due to the outbreak, a yellow circle indicates low severity and an orange circle indicates high severity of people affected by the disease. The map can be filtered according to the disease, from and to dates.</h4></td> 
+
+  		<td style="width:40%;">
     <form method="post">
     	{% csrf_token %}
     {{ form.as_p }}
@@ -51,8 +57,8 @@
           })
         ],
         view: new ol.View({
-          center: ol.proj.fromLonLat([72.6,23.2]),
-          zoom: 2.1
+          center: ol.proj.fromLonLat([78.96,22.59]),
+          zoom: 4.5
         })
       });
       var marker = new Array();

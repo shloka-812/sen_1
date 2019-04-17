@@ -1,17 +1,21 @@
 {% extends "da/base.html" %}
 {% load staticfiles %}
 {% block body_block %}
-
+<head>
+	<title>iHelpu-Newsfeed</title>
+</head>
+<body style="background-color:#9ea0a3;background-image: none;font-family: Georgia;">
 <br>
 <div class="container" >
   <div class="jumbotron" style="opacity:1;text-align:center;">
 <h2>Daily Disease News</h2>
 </div>
 </div>
-
+<br>
 <div class="container">
-<div class= "jumbotron" id="id01"></div>
+<div id="id01"></div>
 </div>
+</body>
 <script type="text/javascript">
 var None="";
 var newsr ={{ news |safe }};
@@ -23,11 +27,12 @@ for (var key in newsr){
       	 
       	  console.log(value);
       	 
-		text = text +"<a href=\""+value.url +"\"><h4>" + value.title + "</h4></a>";
+		text = text +"<div class=\"jumbotron\"><table><tr><td><a href=\""+value.url +"\"><h4>" + value.title + "</h4></a>";
 		text = text + "By  " + value.author+"<br><br>";
 		text = text + "Description : " + value.description + "<br><br>";
-		text = text + "About : " + value.content + "<br>";
-		text= text +  "<br><br>";
+		text = text + "About : " + value.content + "<br></td>";
+		text = text + "<td><img style=\"height:250px;width:250px;object-fit:scale-down;\"src=\""+value.urlToImage+"\"></td></tr></table></div>"
+		text= text +  "<br>";
 		
 		count = count + 1;
 		if(count == 10){

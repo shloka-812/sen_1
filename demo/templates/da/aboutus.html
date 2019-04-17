@@ -2,10 +2,13 @@
 {% load staticfiles %}
 {% block body_block %}
 <br><br><br>
+<head>
+	<title>iHelpu-About us</title>
+</head>
 <div class="container" >
   <div class="jumbotron text-center" >
 <h2 style="font-family: georgia;">About us</h2>
-<p style="font-family: georgia;">We are a team of  7 from DA-IICT who are developing this tool for their Software engineering project</p>
+<p style="font-family: georgia;">We are a team of  7 from DA-IICT who are developing this tool for our Software engineering project</p>
 <p style="font-family:georgia;"> Project undertaken by: <br>
 Shloka Pandya - 	201601154<br>
 Neel Chaudhary - 	201601164<br>
@@ -13,7 +16,9 @@ Kavit Shah - 		201601176<br>
 Ravi Patel - 		201601185<br>
 Pankti Shah - 		201601206<br>
 Mitul Patel - 		201601208<br>
-Kirtana Phatnani - 	201601210<br>
+Kirtana Phatnani - 	201601210<br><br>
+
+This application was created using Django. We have used web-scraping to get outbreak information from WHO and then plotted it on the map using the OpenLayers API. We also used the Google news API to provide daily disease news. We have taken disease related information from WHO and <a href="https://www.nhp.gov.in/">NHP</a>. Django uses SQL Lite 3 to maintain all the User and Outbreak databases. We also incorporated a disease prediction algorithm based on 5 entered symptoms.
 </p>
 </div>
 </div>
