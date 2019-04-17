@@ -96,7 +96,7 @@
 		});
          marker[i].setStyle(new ol.style.Style({
             image: new ol.style.Circle({
-              radius: 4+mag[i]/2 ,
+              radius: 5+3*Math.log(mag[i]) ,
               fill: new ol.style.Fill({
                 color: '#f00'
               })
@@ -120,7 +120,7 @@
 		});
          marker[i].setStyle(new ol.style.Style({
             image: new ol.style.Circle({
-              radius: 4+mag[i]/2 ,
+              radius: 5+3*Math.log(mag[i]) ,
               fill: new ol.style.Fill({
                 color: '#f9e504'
               })
@@ -144,7 +144,7 @@
 		});
          marker[i].setStyle(new ol.style.Style({
             image: new ol.style.Circle({
-              radius: 4+mag[i]/2 ,
+              radius: 5+3*Math.log(mag[i]) ,
               fill: new ol.style.Fill({
                 color: '#f98111'
               })

@@ -90,7 +90,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                       
       </button>
-      <a class="navbar-brand" href="{% url 'index' %}">iHelp</a>
+      <a style="padding-left:150px;" class="navbar-brand" href="{% url 'index' %}">iHelp</a>
     </div>
         <div class="collapse navbar-collapse" id="myNavbar">
         <ul style="text-align: center;color:white;" class="nav navbar-nav">
@@ -110,9 +110,9 @@
             </div>
           </li>
           {% if user.is_authenticated %}
-            <li><a href="{% url 'logout' %}">Logout</a></li>
+            <li style="padding-left:10px;"><a href="{% url 'logout' %}">Logout</a></li>
           {% else %}
-            <li><a class="navbar-link" href="{% url 'da:user_login' %}">Login</a></li>
+            <li style="padding-left:10px;"><a class="navbar-link" href="{% url 'da:user_login' %}">Login</a></li>
           {% endif %}
       </ul>
       </div>

@@ -1,9 +1,12 @@
-# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 from django.test import TestCase
 
 from django.urls import reverse,resolve
+
+from django.contrib.auth.models import User
+
+from .models import UserProfileInfo,Outbreak
 
 class TestUrls(TestCase):
 
@@ -64,6 +67,14 @@ class TestUrls(TestCase):
 		assert resolve(path).view_name == 'logout'
 
 
+class OutbreakModelTest(TestCase):
+	
+	def test_string_representation(self):
+		d = Outbreak(location = "India")
+		self.assertEqual(str(d), d.location)
 
-
-# Create your tests here.
+class UserModelTest(TestCase):
+	
+	def test_string_representation(self):
+		usr = User(username = "Riya")
+		self.assertEqual(str(usr), usr.username)

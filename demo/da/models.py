@@ -23,7 +23,9 @@ l1=(('back_pain','back_pain'),('constipation','constipation')
 ('silver_like_dusting','silver_like_dusting'),('small_dents_in_nails','small_dents_in_nails'),('inflammatory_nails','inflammatory_nails'),('blister','blister'),('red_sore_around_nose','red_sore_around_nose'),
 ('yellow_crust_ooze','yellow_crust_ooze'))
 
-dis=(('Ebola','Ebola'),('Cholera','Cholera'),('Dengue','Dengue'),('Malaria','Malaria'))
+dis=(('Acute Haemorrhagic Fever Syndrome','Acute Haemorrhagic Fever Syndrome'),('Anthrax','Anthrax'),('Chikungunya','Chikungunya'),
+	('Cholera','Cholera'),('Dengue','Dengue'),('Ebola','Ebola'),('Hepatitis','Hepatitis'),('Malaria','Malaria'),('MonkeyPox','MonkeyPox'),
+	('Plague','Plague'),('Typhoid fever','Typhoid fever'),('Yellow Fever','Yellow Fever'),('Zika','Zika'))
 
 class UserProfileInfo(models.Model):
 	user=models.OneToOneField(User, on_delete=models.CASCADE)

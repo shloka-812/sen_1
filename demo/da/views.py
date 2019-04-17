@@ -48,7 +48,7 @@ l1=['back_pain','constipation','abdominal_pain','diarrhoea','mild_fever','yellow
 'silver_like_dusting','small_dents_in_nails','inflammatory_nails','blister','red_sore_around_nose',
 'yellow_crust_ooze']
 
-dis=['Ebola','Cholera','Dengue','Malaria']
+dis=['Acute Haemorrhagic Fever Syndrome','Anthrax','Chikungunya','Cholera','Dengue','Ebola','Hepatitis','Malaria','MonkeyPox','Plague','Typhoid fever','Yellow Fever','Zika']
 
 facts = ['When Syphilis first surfaced, the English called it the ‘French disease’, the French called it the ‘Spanish disease’, Germans called it the ‘French evil’, Russians called it ‘Polish disease’, Poles called it ‘Turkish disease’, Turks called it ‘Christian disease’ and Japan called it ‘Chinese pox.’',
 'After needing 13 liters of blood for a surgery at the age of 13, a man named James Harrison pledged to donate blood once he turned 18. It was discovered that his blood contained a rare antigen which cured Rhesus disease. He has donated blood a record 1,000 times and saved 2,000,000 lives.',
@@ -264,7 +264,10 @@ def outbreaks(request):
             for each in arefined:
                 totala=totala+each.no_affected
                 totalo=totalo+1
-            avga=totala/totalo
+            if totalo:
+                avga=totala/totalo
+            else:
+                avga=0
             for each in drefined:
                 loc = each.location
                 with open(cityfile, 'r') as f:
@@ -339,7 +342,6 @@ def outbreaks(request):
             avga=0
         for each in drefined:
                 loc = each.location
-                print(loc)
                 with open(cityfile, 'r') as f:
                     fields = f.readline()
                     while True:
@@ -424,8 +426,8 @@ def outbreak_submission(request):
     no_of_deaths = request.POST["no_of_deaths"]
     no_of_affected = request.POST["no_of_affected"]
     location = request.POST["location"]
-    date = request.POST["date"]
+    date = request.POST["o_date"]
 
-    outbrk = Outbreak(disease_name=disease_name, no_of_deaths = no_of_deaths, no_of_affected=no_of_affected, location=location, date=date)
+    outbrk = Outbreak(disease_name=disease_name, no_of_deaths = no_of_deaths, no_of_affected=no_of_affected, location=location, o_date=o_date)
     outbrk.save()
     return render(request,'da/feed_data.html')
