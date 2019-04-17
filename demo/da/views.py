@@ -67,6 +67,7 @@ facts = ['When Syphilis first surfaced, the English called it the ‘French dise
 
 filename='da/modelpick'
 
+#@login_required
 def prediction(request):
     # if this is a POST request we need to process the form data
     form = DiseaseForm(request.POST or None)
@@ -252,12 +253,12 @@ def outbreaks(request):
             avga=0
             queryset=Outbreak.objects.all()
             if(fdf<tdf):
-                drefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_deaths) as no_deaths FROM (SELECT * FROM da_Outbreak WHERE (disease_name=%s AND o_date>%s AND o_date<%s)) GROUP BY location',[dnf,fdf,tdf] )
-                arefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_affected) as no_affected FROM (SELECT * FROM da_Outbreak WHERE (disease_name=%s AND o_date>%s AND o_date<%s)) GROUP BY location',[dnf,fdf,tdf] )
+                drefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_deaths) as no_deaths FROM (SELECT * FROM da_Outbreak WHERE (disease_name=%s AND o_date>%s AND o_date<%s)) AS foo GROUP BY location',[dnf,fdf,tdf] )
+                arefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_affected) as no_affected FROM (SELECT * FROM da_Outbreak WHERE (disease_name=%s AND o_date>%s AND o_date<%s)) AS foo GROUP BY location',[dnf,fdf,tdf] )
             else :
                 days100 = timezone.now() - datetime.timedelta(days=100)
-                drefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_deaths) as no_deaths FROM (SELECT * FROM da_Outbreak WHERE o_date>%s) GROUP BY location',[days100])
-                arefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_affected) as no_affected FROM (SELECT * FROM da_Outbreak WHERE o_date>%s) GROUP BY location',[days100])
+                drefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_deaths) as no_deaths FROM (SELECT * FROM da_Outbreak WHERE o_date>%s) AS foo GROUP BY location',[days100])
+                arefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_affected) as no_affected FROM (SELECT * FROM da_Outbreak WHERE o_date>%s) AS foo GROUP BY location',[days100])
         
             totala=0
             totalo=0
@@ -326,8 +327,8 @@ def outbreaks(request):
         avga=0
         days100 = timezone.now() - datetime.timedelta(days=100)
         queryset = Outbreak.objects.all()
-        drefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_deaths) as no_deaths FROM (SELECT * FROM da_Outbreak WHERE o_date>%s) GROUP BY location',[days100])
-        arefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_affected) as no_affected FROM (SELECT * FROM da_Outbreak WHERE o_date>%s) GROUP BY location',[days100])
+        drefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_deaths) as no_deaths FROM (SELECT * FROM da_Outbreak WHERE o_date>%s) AS foo GROUP BY location',[days100])
+        arefined = queryset.raw('SELECT 1 as id,location,SUM(no_of_affected) as no_affected FROM (SELECT * FROM da_Outbreak WHERE o_date>%s) AS foo GROUP BY location',[days100])
         totala=0
         totalo=0
         for each in arefined:
