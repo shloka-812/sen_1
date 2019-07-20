@@ -218,9 +218,10 @@ def user_login(request):
         return render(request, 'da/login.html', {})
 
 def newsfeed(request):
+	todaydate = datetime.datetime.now().strftime("%Y-%m-%d")
 	url = ('https://newsapi.org/v2/everything?'
 		'q=Outbreaks&'
-		'from=2019-06-20&'
+		'from='+todaydate+'&'
 		'sortBy=popularity&'
 		'apiKey=355d55073190411b9e7af220c4b44d78')
 	response = rq.get(url)
