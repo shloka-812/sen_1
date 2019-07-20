@@ -220,12 +220,13 @@ def user_login(request):
 def newsfeed(request):
 	url = ('https://newsapi.org/v2/everything?'
 		'q=Outbreaks&'
-		'from=2019-04-08&'
+		'from=2019-06-20&'
 		'sortBy=popularity&'
 		'apiKey=355d55073190411b9e7af220c4b44d78')
 	response = rq.get(url)
-	dict = response.json()
-	return render(request,'da/newsfeed.html',{'news':dict["articles"]})
+	dictn = response.json()
+	print(dictn)
+	return render(request,'da/newsfeed.html',{'news':dictn["articles"]})
 
 	
 def keyfacts(request):
