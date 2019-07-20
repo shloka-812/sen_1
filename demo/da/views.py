@@ -222,7 +222,7 @@ def newsfeed(request):
 		'q=Outbreaks&'
 		'from=2019-04-08&'
 		'sortBy=popularity&'
-		'apiKey=962af2e30f5740c39bd6b0cb5a8b5de3')
+		'apiKey=355d55073190411b9e7af220c4b44d78')
 	response = rq.get(url)
 	dict = response.json()
 	return render(request,'da/newsfeed.html',{'news':dict["articles"]})
@@ -445,7 +445,7 @@ def outbreak_submission(request):
     no_of_deaths = request.POST["no_of_deaths"]
     no_of_affected = request.POST["no_of_affected"]
     location = request.POST["location"]
-    date = request.POST["o_date"]
+    o_date = request.POST.get("o_date","2019-04-17")
 
     outbrk = Outbreak(disease_name=disease_name, no_of_deaths = no_of_deaths, no_of_affected=no_of_affected, location=location, o_date=o_date)
     outbrk.save()

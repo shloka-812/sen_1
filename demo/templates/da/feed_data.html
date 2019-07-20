@@ -14,20 +14,20 @@
  	<form action="{% url 'da:outbreak_submission' %}" method="post">
  		{% csrf_token %}
 
-    <label for="disease_name">disease name</label><br>
+    <label for="disease_name">Disease name</label><br>
     <input type="text" id="disease_name" name="disease_name" >
     <br><br>
-    <label for="no_of_deaths">No of deaths</label>
+    <label for="no_of_deaths">Number of deaths</label>
     <input type="text" id="no_of_deaths" name="no_of_deaths">
     <br><br>
-    <label for="no_of_affected">NO of affected people</label><br>
+    <label for="no_of_affected">Number of affected people</label><br>
     <input type="text" id="no_of_affected" name="no_of_affected">
     <br><br>
-    <label for="location">location</label><br>
+    <label for="location">Location</label><br>
     <input type="text" id="location" name="location">
     <br><br>
-    <label for="date">Date Of Entry</label><br>
-    <input style="width:100%;" type="Date" id="date" name="date">
+    <label for="o_date">Date of Entry</label><br>
+    <input style="width:100%;" type="Date" id="date" name="o_date">
     <br><br>
     <input id="id_feeddata" type="submit" value="Submit">
   	</form>
@@ -37,7 +37,7 @@
 
 
  {% else %}
-        <h2>pls login</h2>
+        <h2>Please login</h2>
     {% endif %}
 
 {% endblock %}
