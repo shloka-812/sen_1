@@ -163,7 +163,7 @@ pyts==0.7.0
 pytube==7.0.10
 pytz==2017.2
 PyWavelets==0.5.2
-PyYAML==3.12
+PyYAML==5.4
 pyzbar==0.1.7
 pyzmq==16.0.2
 QtAwesome==0.4.4
