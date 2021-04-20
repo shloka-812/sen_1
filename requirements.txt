@@ -137,7 +137,7 @@ protobuf==3.5.2.post1
 psutil==5.2.2
 psycopg2==2.7.4
 ptyprocess==0.5.1
-py==1.4.33
+py==1.10.0
 pycosat==0.6.2
 pycparser==2.17
 pycrypto==2.6.1
