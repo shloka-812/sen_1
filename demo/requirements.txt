@@ -18,7 +18,7 @@
 # demo/urls.py: 2
 # demo/wsgi.py: 12
 # manage.py: 14
-Django == 1.11.2
+Django == 2.2.24
 
 # demo/settings.py: 88
 dj_database_url == 0.5.0
