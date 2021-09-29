@@ -103,7 +103,7 @@ mysqlclient==1.3.12
 nbconvert==5.1.1
 nbformat==4.3.0
 networkx==1.11
-nltk==3.2.3
+nltk==3.6.3
 nolds==0.4.1
 nose==1.3.7
 notebook==5.0.0
