@@ -110,7 +110,7 @@ notebook==5.0.0
 npm==0.1.1
 numba==0.43.0
 numexpr==2.6.2
-numpy==1.14.3
+numpy==1.22.0
 numpydoc==0.6.0
 odo==0.5.0
 olefile==0.44
